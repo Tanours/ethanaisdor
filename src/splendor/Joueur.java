@@ -60,6 +60,8 @@ public class Joueur {
 	
 	
 	public Joueur buyCard(Card card) {
+		Objects.requireNonNull(card);
+		
 	    if (!canBuy(card)) {
 	        return this;
 	    }
