@@ -75,6 +75,32 @@ public class Joueur {
 
 	    return new Joueur(this.name, this.points + card.prestige(), newTokens, newCards);
 	}
+	
+	@Override
+	public String toString() {
+	    StringBuilder res = new StringBuilder();
+	    res.append(name).append("\n");
+	    
+	    res.append("\t Points : ").append(points).append("\n");
+	    
+	    res.append("\t Jetons : ");
+	    for (Stones stone : Stones.values()) {
+	        res.append(stone).append("=").append(tokens.getOrDefault(stone, 0)).append(" ");
+	    }
+	    res.append("\n");
+	    
+	    res.append("\t Cartes : \n");
+	    if (cards.isEmpty()) {
+	        res.append("\t\t Aucune");
+	    } else {
+	        for (Card card : cards) {
+	            res.append("\t\t" + card.toString());
+	        }
+	    }
+	    res.append("\n");
+	    return res.toString();
+	}
+
 
 	
 }
