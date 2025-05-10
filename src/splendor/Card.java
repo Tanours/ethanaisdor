@@ -3,7 +3,7 @@ package splendor;
 import java.util.HashMap;
 import java.util.Map;
 
-public record Card(Stones stone ,HashMap<Stones,Integer> needStones,int prestige) {
+public record Card(int id,Stones stone ,HashMap<Stones,Integer> needStones,int prestige) {
 	public Card{
 		
 	}
