@@ -83,15 +83,15 @@ public class Joueur {
 	    
 	    res.append("\t Points : ").append(points).append("\n");
 	    
-	    res.append("\t Jetons : ");
+	    res.append("\t Tokens : ");
 	    for (Stones stone : Stones.values()) {
 	        res.append(stone).append("=").append(tokens.getOrDefault(stone, 0)).append(" ");
 	    }
 	    res.append("\n");
 	    
-	    res.append("\t Cartes : \n");
+	    res.append("\t Cards : \n");
 	    if (cards.isEmpty()) {
-	        res.append("\t\t Aucune");
+	        res.append("\t\t none");
 	    } else {
 	        for (Card card : cards) {
 	            res.append("\t\t" + card.toString());
