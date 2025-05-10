@@ -3,6 +3,7 @@ package splendor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Joueur {
@@ -25,6 +26,15 @@ public class Joueur {
 		this.tokens.put(stone, tokens.getOrDefault(stone, 0) + quantity);
 	}
 	
-	
+	public void canBuy(Card card) {
+		Objects.requireNonNull(card);
+		
+		for(Map.Entry<Stones, Integer> cost :  card.needStones().entrySet()) {
+			Stones stone = cost.getKey();
+			int quantity = cost.getValue();
+			
+			
+		}
+	}
 	
 }
