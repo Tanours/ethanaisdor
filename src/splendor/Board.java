@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Plateau {
+public class Board {
 	private final HashMap<Integer, List<Card>> cards;
 	private final HashMap<Stones, Integer> tokens;
 	
-	public Plateau() {
+	public Board() {
 		this.cards = new HashMap<Integer, List<Card>>();
 		this.tokens = new HashMap<Stones, Integer>();
 	}

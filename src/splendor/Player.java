@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Joueur {
+public class Player {
 	
 	public final String name;
 	public final Map<Stones, Integer> tokens;
 	public final List<Card> cards;
 	public final int points;
 	
-	public Joueur(String name) {
+	public Player(String name) {
 		Objects.requireNonNull(name, "name of player can't be null");
 		
 		this.name = name;
@@ -23,7 +23,7 @@ public class Joueur {
 	}
 	
 	
-	public Joueur(String name, int points, Map<Stones, Integer> tokens, List<Card> cards) {
+	public Player(String name, int points, Map<Stones, Integer> tokens, List<Card> cards) {
 		Objects.requireNonNull(name, "name of player can't be null");
 		
 		if(points < 0) {
@@ -59,7 +59,7 @@ public class Joueur {
 	}
 	
 	
-	public Joueur buyCard(Card card) {
+	public Player buyCard(Card card) {
 		Objects.requireNonNull(card);
 		
 	    if (!canBuy(card)) {
@@ -75,7 +75,7 @@ public class Joueur {
 	    List<Card> newCards = new ArrayList<>(this.cards);
 	    newCards.add(card);
 
-	    return new Joueur(this.name, this.points + card.prestige(), newTokens, newCards);
+	    return new Player(this.name, this.points + card.prestige(), newTokens, newCards);
 	}
 	
 	@Override
