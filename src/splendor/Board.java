@@ -24,7 +24,7 @@ public class Board {
 	}
 	
 	
-	private List<Card> GenerateCardsList(int startIndex,int level,int numberCard){
+	public List<Card> GenerateCardsList(int startIndex,int level,int numberCard){
 		var res = new ArrayList<Card>();
 		if(level < 1 || startIndex < 0 || numberCard < 0) {
 			throw new IllegalArgumentException();
@@ -47,7 +47,19 @@ public class Board {
 		}
 		return res;
 	}
-	private HashMap<Integer, List<Card>> GenerateCards(){
+	
+	public List<Card> generateCardsListWithCost(int startIndex,int level,int numberCardByColor,int cost){
+		var resCard = new ArrayList<Card>();
+		var index = startIndex;
+		for(int i = 0;i<numberCardByColor;i++) {
+			for(int ColorIndex = 0;ColorIndex<6;ColorIndex++) {
+				var stone = Stones.values()[ColorIndex];
+				resCard.add(new Card(index,stone,new HashMap<>(Map.of(stone, cost)),1));
+			}
+		}
+		return resCard;
+	}
+	public HashMap<Integer, List<Card>> GenerateCards(){
 		var res = new HashMap<Integer, List<Card>>();
 		res.put(1, this.GenerateCardsList(0,1,40));
 		res.put(2, this.GenerateCardsList(40,2,30));

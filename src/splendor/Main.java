@@ -4,7 +4,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		var board = new Board();
-		System.out.println(board.getTokens());
+		var cards = board.generateCardsListWithCost(1,1 ,8, 3);
+		System.out.println(cards);
 
 	}
 
