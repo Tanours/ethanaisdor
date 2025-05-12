@@ -23,10 +23,11 @@ public class Board {
 		return Map.copyOf(tokens);
 	}
 	
+	
 	private List<Card> GenerateCardsList(int startIndex,int level,int numberCard){
 		var res = new ArrayList<Card>();
-		if(level < 1) {
-			throw new IllegalArgumentException("Prestige cannot be negative");
+		if(level < 1 || startIndex < 0 || numberCard < 0) {
+			throw new IllegalArgumentException();
 		}
 		var rng = ThreadLocalRandom.current();
 		for(int i = 0;i<numberCard;i++) {
