@@ -3,7 +3,8 @@ package splendor;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		var board = new Board();
+		System.out.println(board.getTokens());
 
 	}
 

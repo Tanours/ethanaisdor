@@ -3,6 +3,7 @@ package splendor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
@@ -10,10 +11,19 @@ public class Board {
 	private final HashMap<Stones, Integer> tokens;
 	
 	public Board() {
-		this.cards = new HashMap<Integer, List<Card>>();
+		this.cards = this.GenerateCards();
 		this.tokens = new HashMap<Stones, Integer>();
+	
 	}
-	public List<Card> GenerateCardsList(int startIndex,int level,int numberCard){
+	
+	public Map<Integer, List<Card>> getCards() {
+		return Map.copyOf(cards);
+	}
+	public Map<Stones,Integer> getTokens(){
+		return Map.copyOf(tokens);
+	}
+	
+	private List<Card> GenerateCardsList(int startIndex,int level,int numberCard){
 		var res = new ArrayList<Card>();
 		if(level < 1) {
 			throw new IllegalArgumentException("Prestige cannot be negative");
@@ -29,14 +39,14 @@ public class Board {
 				}
 				
 			}
-			var prestige = level>1?rng.nextInt(level-1,level):0;
+			var prestige = level==1?0:level==2?rng.nextInt(1,3):rng.nextInt(3,5);
 			var id = startIndex;
 			res.add(new Card(id,bonus,needStones,prestige));
 			startIndex++;
 		}
 		return res;
 	}
-	public HashMap<Integer, List<Card>> GenerateCards(){
+	private HashMap<Integer, List<Card>> GenerateCards(){
 		var res = new HashMap<Integer, List<Card>>();
 		res.put(1, this.GenerateCardsList(0,1,40));
 		res.put(2, this.GenerateCardsList(40,2,30));
