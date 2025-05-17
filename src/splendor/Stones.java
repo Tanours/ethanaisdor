@@ -6,5 +6,9 @@ public enum Stones {
 	RUBY,
 	DIAMOND,
 	ONYX,
-	GOLDJOKER
+	GOLDJOKER;
+	
+	public String getColor(Stones stone) {
+		return Color.valueOf(stone.toString()).getValue();
+	}
 }

@@ -111,8 +111,9 @@ public class Board {
 				
 			}
 		}catch(IOException e) {
-			System.out.println(Color.RED.getValue()+"Error : "+"\u001B[0m"+"cannot read file");
+			System.out.println(Color.RED.getValue()+"Error : "+Color.RESET.getValue()+"cannot read file");
 		}
 		return null;
 	}
+	
 }
