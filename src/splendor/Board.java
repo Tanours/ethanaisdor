@@ -13,7 +13,7 @@ public class Board {
 	
 	public Board() {
 		this.cards = this.generateCards();
-		this.tokens = this.generateTokens();
+		this.tokens = new HashMap<Stones, Integer>();
 	
 	}
 	
@@ -84,8 +84,8 @@ public class Board {
 	
 	
 	public void revealCards() {
+		
 	}
-
 	public boolean selectTokens(Player player,Stones stone,int count) {
 		Objects.requireNonNull(player);
 		if(count <= 0) {
