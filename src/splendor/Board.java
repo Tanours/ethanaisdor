@@ -1,5 +1,8 @@
 package splendor;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,5 +101,18 @@ public class Board {
 		player.tokens.merge(stone,count,Integer::sum);
 		return true;
 		
+	}
+	public HashMap<Integer, List<Card>> CardReferenceReader(Path filePath) throws IOException {
+		Objects.requireNonNull(filePath);
+		try(var file = Files.newBufferedReader(filePath)){
+			String line;
+			while((line = file.readLine()) != null) {
+				System.out.println(line);
+				
+			}
+		}catch(IOException e) {
+			System.out.println(Color.RED.getValue()+"Error : "+"\u001B[0m"+"cannot read file");
+		}
+		return null;
 	}
 }

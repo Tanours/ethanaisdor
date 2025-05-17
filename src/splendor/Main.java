@@ -1,9 +1,17 @@
 package splendor;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 public class Main {
 
 	public static void main(String[] args) {
 		var board = new Board();
+		try {
+			board.CardReferenceReader(Path.of("cardReference.html"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		var level1Cards = board.getCards().get(1);
 		
