@@ -32,8 +32,8 @@ public class Player {
 		
 		this.name = name;
 		this.points = points;
-		this.tokens = Map.copyOf(tokens);
-		this.cards = List.copyOf(cards);
+		this.tokens = tokens;
+		this.cards = cards;
 	}
 
 	

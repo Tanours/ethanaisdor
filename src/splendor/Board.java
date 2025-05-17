@@ -12,13 +12,14 @@ public class Board {
 	
 	public Board() {
 		this.cards = this.GenerateCards();
-		this.tokens = new HashMap<Stones, Integer>();
+		this.tokens = this.generateTokens();
 	
 	}
 	
 	public Map<Integer, List<Card>> getCards() {
 		return Map.copyOf(cards);
 	}
+	
 	public Map<Stones,Integer> getTokens(){
 		return Map.copyOf(tokens);
 	}
@@ -66,5 +67,23 @@ public class Board {
 		res.put(3, this.GenerateCardsList(70,3,20));
 		
 		return res;
+	}
+	
+	public HashMap<Stones, Integer> generateTokens() {
+		var res = new HashMap<Stones, Integer>();
+		
+		res.put(Stones.SAPHIR, 7);
+		res.put(Stones.EMERALD, 7);
+		res.put(Stones.RUBY, 7);
+		res.put(Stones.DIAMOND, 7);
+		res.put(Stones.ONYX, 7);
+		res.put(Stones.GOLDJOKER, 5);
+		
+		return res;
+	}
+	
+	
+	public void revealCards() {
+		
 	}
 }
