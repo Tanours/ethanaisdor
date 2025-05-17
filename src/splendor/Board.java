@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
@@ -11,7 +12,7 @@ public class Board {
 	private final HashMap<Stones, Integer> tokens;
 	
 	public Board() {
-		this.cards = this.GenerateCards();
+		this.cards = this.generateCards();
 		this.tokens = new HashMap<Stones, Integer>();
 	
 	}
@@ -24,7 +25,7 @@ public class Board {
 	}
 	
 	
-	public List<Card> GenerateCardsList(int startIndex,int level,int numberCard){
+	public List<Card> generateCardsList(int startIndex,int level,int numberCard){
 		var res = new ArrayList<Card>();
 		if(level < 1 || startIndex < 0 || numberCard < 0) {
 			throw new IllegalArgumentException();
@@ -52,19 +53,31 @@ public class Board {
 		var resCard = new ArrayList<Card>();
 		var index = startIndex;
 		for(int i = 0;i<numberCardByColor;i++) {
-			for(int ColorIndex = 0;ColorIndex<6;ColorIndex++) {
+			for(int ColorIndex = 0;ColorIndex<5;ColorIndex++) {
 				var stone = Stones.values()[ColorIndex];
+				
 				resCard.add(new Card(index,stone,new HashMap<>(Map.of(stone, cost)),1));
 			}
 		}
 		return resCard;
 	}
-	public HashMap<Integer, List<Card>> GenerateCards(){
+	public HashMap<Integer, List<Card>> generateCards(){
 		var res = new HashMap<Integer, List<Card>>();
-		res.put(1, this.GenerateCardsList(0,1,40));
-		res.put(2, this.GenerateCardsList(40,2,30));
-		res.put(3, this.GenerateCardsList(70,3,20));
+		res.put(1, this.generateCardsListWithCost(1,1,8,3));
 		
 		return res;
+	}
+	public boolean selectTokens(Player player,Stones stone,int count) {
+		Objects.requireNonNull(player);
+		if(count <= 0) {
+			throw new IllegalArgumentException();
+		}
+		if(tokens.get(stone) < 4) {
+			return false;
+		}
+		tokens.computeIfPresent(stone, (s,curr) -> curr = curr-count);
+		player.tokens.merge(stone,count,Integer::sum);
+		return true;
+		
 	}
 }
