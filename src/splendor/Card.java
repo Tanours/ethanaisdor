@@ -1,7 +1,6 @@
 package splendor;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public record Card(int id,Stones stone ,HashMap<Stones,Integer> needStones,int prestige) {

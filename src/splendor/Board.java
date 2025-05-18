@@ -16,8 +16,7 @@ public class Board {
 	
 	public Board() {
 		this.cards = this.generateCards();
-		this.tokens = new HashMap<Stones, Integer>();
-	
+		this.tokens = this.generateTokens();
 	}
 	
 	public Map<Integer, List<Card>> getCards() {
@@ -26,6 +25,11 @@ public class Board {
 	
 	public Map<Stones,Integer> getTokens(){
 		return Map.copyOf(tokens);
+	}
+	
+	public boolean takeToken(Player player, Map<Stones, Integer> stones) {
+		return false;
+		
 	}
 	
 	
@@ -65,6 +69,7 @@ public class Board {
 		}
 		return resCard;
 	}
+	
 	public HashMap<Integer, List<Card>> generateCards(){
 		var res = new HashMap<Integer, List<Card>>();
 		res.put(1, this.generateCardsListWithCost(1,1,8,3));
@@ -87,21 +92,56 @@ public class Board {
 	
 	
 	public void revealCards() {
-		
+		for(int i = 0; i < 4; i++) {
+            System.out.print(i+1 + " :\n" + cards.get(1).get(i));
+        }
 	}
-	public boolean selectTokens(Player player,Stones stone,int count) {
-		Objects.requireNonNull(player);
-		if(count <= 0) {
+	
+	
+	public boolean selectTokens(Player player, Stones stone, int count) {
+	    Objects.requireNonNull(player);
+	    if(count <= 0 || count > 2) {
 			throw new IllegalArgumentException();
 		}
-		if(tokens.get(stone) < 4) {
-			return false;
-		}
-		tokens.computeIfPresent(stone, (s,curr) -> curr = curr-count);
-		player.tokens.merge(stone,count,Integer::sum);
-		return true;
-		
+	    
+	    int available = tokens.getOrDefault(stone, 0);
+	    
+	    if (count == 2) {
+	        if (available < 4) {
+	            return false;
+	        }
+	    } else {
+	        if (available < 1) {
+	            return false;
+	        }
+	    }
+	    
+	    tokens.computeIfPresent(stone, (s,curr) -> curr = curr-count);
+	    player.tokens.merge(stone, count, Integer::sum);
+	    return true;
 	}
+	
+	public Player selectCard(Player player, Card card) {
+	    Objects.requireNonNull(player);
+	    Objects.requireNonNull(card);
+
+	    if (!player.canBuy(card)) {
+	        return player;
+	    }
+
+	    Player newPlayer = player.buyCard(card);
+
+	    for (List<Card> cardList : cards.values()) {
+	        if (cardList.remove(card)) {
+	            break;
+	        }
+	    }
+
+	    return newPlayer;
+	}
+
+
+
 	public HashMap<Integer, List<Card>> CardReferenceReader(Path filePath) throws IOException {
 		Objects.requireNonNull(filePath);
 		try(var file = Files.newBufferedReader(filePath)){

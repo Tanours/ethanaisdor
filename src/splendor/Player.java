@@ -9,21 +9,27 @@ import java.util.Objects;
 public class Player {
 	
 	public final String name;
+	public final int age;
 	public final Map<Stones, Integer> tokens;
 	public final List<Card> cards;
 	public final int points;
 	
-	public Player(String name) {
+	public Player(String name, int age) {
 		Objects.requireNonNull(name, "name of player can't be null");
 		
+		if(age < 0) {
+			throw new IllegalArgumentException("age of player can't be negative");
+		}
+		
 		this.name = name;
+		this.age = age;
 		this.points = 0;
 		this.cards = new ArrayList<Card>();
 		this.tokens = new HashMap<Stones, Integer>();
 	}
 	
 	
-	public Player(String name, int points, Map<Stones, Integer> tokens, List<Card> cards) {
+	public Player(String name, int age, int points, Map<Stones, Integer> tokens, List<Card> cards) {
 		Objects.requireNonNull(name, "name of player can't be null");
 		
 		if(points < 0) {
@@ -31,6 +37,7 @@ public class Player {
 		}
 		
 		this.name = name;
+		this.age = age;
 		this.points = points;
 		this.tokens = tokens;
 		this.cards = cards;
@@ -61,10 +68,6 @@ public class Player {
 	
 	public Player buyCard(Card card) {
 		Objects.requireNonNull(card);
-		
-	    if (!canBuy(card)) {
-	        return this;
-	    }
 
 	    Map<Stones, Integer> newTokens = new HashMap<>(this.tokens);
 	    for (Map.Entry<Stones, Integer> cost : card.needStones().entrySet()) {
@@ -75,7 +78,8 @@ public class Player {
 	    List<Card> newCards = new ArrayList<>(this.cards);
 	    newCards.add(card);
 
-	    return new Player(this.name, this.points + card.prestige(), newTokens, newCards);
+	    return new Player(this.name, this.age, this.points + card.prestige(), newTokens, newCards);
+	    
 	}
 	
 	@Override
@@ -102,6 +106,18 @@ public class Player {
 	    res.append("\n");
 	    return res.toString();
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getPoints() {
+		return points;
+	}
+	
+	public int getAge() {
+        return age;
+    }
 
 
 	
