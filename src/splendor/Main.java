@@ -15,11 +15,11 @@ public class Main {
         var gameOver = false;
         int turn = 1;
         var board = new Board();
-		try {
-			board.CardReferenceReader(Path.of("cardReference.html"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			board.CardReferenceReader(Path.of("cardReference.html"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
         try (Scanner scanner = new Scanner(System.in)) {
             List<Player> players = PrintGame.initPlayers(scanner);
