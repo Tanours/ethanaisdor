@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Game {
     private final Board board = new Board();
-    private final List<Player> players;
+    private List<Player> players;
     private final PrintGame printGame;
     private final Scanner scanner = new Scanner(System.in);
     private final Action action;
@@ -54,7 +54,6 @@ public class Game {
             System.out.println("=".repeat(18) + "TOUR : " + turn + "=".repeat(18));
             board.revealCards();
             for (var player :players ) {
-            	System.out.println(player.tokens);
                 playerTurn(player);
                 if (victory(player)) {
                     System.out.println("Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
