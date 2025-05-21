@@ -35,16 +35,9 @@ public record PrintGame(Board board, List<Player> players) {
         return players;
     }
 	
-	public int printChoice(Player player, Scanner scanner) {
-        System.out.println("Tour de " + player.getName());
-        System.out.println("Points : " + player.getPoints());
-
-        System.out.println("Actions possibles :");
+	public void printChoice() {
         System.out.println("1 - Prendre 3 jetons de couleurs différentes");
         System.out.println("2 - Prendre 2 jetons de la même couleur");
         System.out.println("3 - Acheter une carte");
-        System.out.print("Choix : ");
-
-        return scanner.nextInt();
     }
 }
