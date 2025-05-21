@@ -10,9 +10,9 @@ public class Player {
 	
 	public final String name;
 	public final int age;
-	public final Map<Stones, Integer> tokens;
-	public final List<Card> cards;
-	public final int points;
+	public Map<Stones, Integer> tokens;
+	public List<Card> cards;
+	private int points;
 	
 	public Player(String name, int age) {
 		Objects.requireNonNull(name, "name of player can't be null");
@@ -47,7 +47,7 @@ public class Player {
 	public void addToken(Stones stone, int quantity) {
 		Objects.requireNonNull(stone);
 		
-		this.tokens.put(stone, tokens.getOrDefault(stone, 0) + quantity);
+		tokens.put(stone, tokens.getOrDefault(stone, 0) + quantity);
 	}
 	
 	
@@ -66,31 +66,32 @@ public class Player {
 	}
 	
 	
-	public Player buyCard(Card card) {
+	public void buyCard(Card card) {
 		Objects.requireNonNull(card);
 
-	    Map<Stones, Integer> newTokens = new HashMap<>(this.tokens);
-	    for (Map.Entry<Stones, Integer> cost : card.needStones().entrySet()) {
-	        Stones stone = cost.getKey();
-	        newTokens.put(stone, newTokens.get(stone) - cost.getValue());
+	    for (var cost : card.needStones().entrySet()) {
+	        var stone = cost.getKey();
+	        if(tokens.get(stone) - cost.getValue() > 0) {
+	        	tokens.replace(stone,tokens.get(stone) - cost.getValue());
+	        }
+	        else {
+	        	tokens.remove(stone);
+	        }
 	    }
-
-	    List<Card> newCards = new ArrayList<>(this.cards);
-	    newCards.add(card);
-
-	    return new Player(this.name, this.age, this.points + card.prestige(), newTokens, newCards);
+	    cards.add(card);
+	    points+=card.prestige();
 	    
 	}
 	
 	@Override
 	public String toString() {
-	    StringBuilder res = new StringBuilder();
+	    var res = new StringBuilder();
 	    res.append(name).append("\n");
 	    
 	    res.append("\t Points : ").append(points).append("\n");
 	    
 	    res.append("\t Tokens : ");
-	    for (Stones stone : Stones.values()) {
+	    for (var stone : Stones.values()) {
 	        res.append(stone).append("=").append(tokens.getOrDefault(stone, 0)).append(" ");
 	    }
 	    res.append("\n");

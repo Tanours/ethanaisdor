@@ -53,13 +53,15 @@ public class Game {
         while (!gameOver) {
             System.out.println("=".repeat(18) + "TOUR : " + turn + "=".repeat(18));
             board.revealCards();
-            for (var player : players) {
+            for (var player :players ) {
+            	System.out.println(player.tokens);
                 playerTurn(player);
                 if (victory(player)) {
                     System.out.println("Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
                     gameOver = true;
                     break;
                 }
+                System.out.println(player);
             }
             turn++;
         }

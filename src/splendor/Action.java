@@ -56,13 +56,10 @@ public class Action {
         return false;
     }
 
-    public void play(int choice, Player player, Board board) {
+    public boolean play(int choice, Player player, Board board) {
         Objects.requireNonNull(player);
         Objects.requireNonNull(board);
-
-        boolean valid = false;
-        while (!valid) {
-            valid = switch (choice) {
+            return switch (choice) {
                 case 1 -> one(board, player);
                 case 2 -> two(board, player);
                 case 3 -> three(board, player);
@@ -71,6 +68,5 @@ public class Action {
                     yield false;
                 }
             };
-        }
     }
 }

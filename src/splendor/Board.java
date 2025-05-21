@@ -73,15 +73,9 @@ public class Board {
 	}
 
 	public HashMap<Integer, List<Card>> generateCards() {
-		try {
-
-			var res = this.CardReferenceReader("ressources/cardReferences.html");
-			return res;
-		} catch (IOException e) {
-			System.out.println("error");
-			e.printStackTrace();
-			return null;
-		}
+		var hash = new HashMap<Integer, List<Card>>();
+		hash.putIfAbsent(1, generateCardsListWithCost(1, 1, 8, 1));
+		return hash;
 
 	}
 
