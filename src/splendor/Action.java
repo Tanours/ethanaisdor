@@ -6,98 +6,71 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Action {
-	
-	public boolean one(Board board, Player player) {
-		
-		Set<Stones> pickedColors = new HashSet<>();
-		try (var sc = new Scanner(System.in)) {
-			while (pickedColors.size() < 3) {
-				System.out.println("Choissisez une couleur différente :(" + pickedColors.size() + "/3)");
-				Stones stone = Stones.DIAMOND;
-				stone = Stones.valueOf(sc.next());
-				
 
-				if (pickedColors.contains(stone))
-					continue;
+    private final Scanner scanner;
 
-				if (!board.selectTokens(player, stone, 1))
-					continue;
-				
-				pickedColors.add(stone);
-			}
-		}
-		return true;
-	}
+    public Action(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
-	private boolean two(Board board, Player player) {
+    public boolean one(Board board, Player player) {
+        Set<Stones> pickedColors = new HashSet<>();
+        while (pickedColors.size() < 3) {
+            System.out.println("Choisissez une couleur différente : (" + (pickedColors.size()+1) + "/3)");
+            try {
+                Stones stone = Stones.valueOf(scanner.next().toUpperCase());
+                if (pickedColors.contains(stone)) continue;
+                if (!board.selectTokens(player, stone, 1)) continue;
+                pickedColors.add(stone);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Couleur invalide.");
+            }
+        }
+        return true;
+    }
 
-		try (var sc = new Scanner(System.in)) {
-			Stones stone;
-			try {
-				stone = Stones.valueOf(sc.next().toUpperCase());
-				return board.selectTokens(player, stone, 2);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
-	
-	private boolean three(Board board, Player player) {
-		
-		try (var sc = new Scanner(System.in)) {
-			System.out.println("\nChoissisez une carte : ");
-			board.revealCards();
-			int cardIndex = sc.nextInt() - 1;
-			System.out.println(cardIndex);
-			sc.nextLine();
-			
-			var card = board.getCards().get(1).get(cardIndex);
-			
-			if(!board.selectCard(player, card)) {
-	        	return false;
-	        }
-			
-			
-		}
-		
-	
-       
-       
-        
-//        var i = players.indexOf(player);
-//        
-//        if(!board.selectCard(player, card)) {
-//        	System.out.println("Vous ne pouvez pas acheter cette carte.");
-//        }
-//        
-//        
-//        var test = player.buyCard(card);
-//        players.set(i, test);
-//        System.out.println(players);
-//   
-//        System.out.println("cartes du jeu = " + board.getCards().get(1).size());
-		return false;
-	}
+    private boolean two(Board board, Player player) {
+        System.out.println("Choisissez une couleur pour prendre 2 jetons :");
+        try {
+            Stones stone = Stones.valueOf(scanner.next().toUpperCase());
+            return board.selectTokens(player, stone, 2);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Couleur invalide.");
+        }
+        return false;
+    }
 
-	
+    private boolean three(Board board, Player player) {
+        System.out.println("\nChoisissez une carte à acheter : ");
+        board.revealCards();
+        if (scanner.hasNextInt()) {
+            int cardIndex = scanner.nextInt() - 1;
+            scanner.nextLine();
+            var card = board.getCards().get(1).get(cardIndex);
+            if (!board.selectCard(player, card)) {
+                System.out.println("Vous ne pouvez pas acheter cette carte.");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 
-	public void play(int choice, Player player, Board board) {
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(board);
+    public void play(int choice, Player player, Board board) {
+        Objects.requireNonNull(player);
+        Objects.requireNonNull(board);
 
-		var valid = false;
-		while (!valid) {
-			valid = switch (choice) {
-			case 1 -> this.one(board, player);
-			case 2 -> this.two(board, player);
-			case 3 -> this.three(board, player);
-			default -> false;
-			};
-		}
-
-	}
-
-	
-
+        boolean valid = false;
+        while (!valid) {
+            valid = switch (choice) {
+                case 1 -> one(board, player);
+                case 2 -> two(board, player);
+                case 3 -> three(board, player);
+                default -> {
+                    System.out.println("Choix invalide.");
+                    yield false;
+                }
+            };
+        }
+    }
 }
