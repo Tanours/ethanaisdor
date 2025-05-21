@@ -105,13 +105,14 @@ public class Board {
 	
 	public void revealCards() {
 		for(int i = 0; i < 4; i++) {
-            System.out.print(i+1 + " :\n" + cards.get(1).get(i));
+            System.out.print(i+1 + " : " + cards.get(1).get(i));
         }
 	}
 	
 	
 	public boolean selectTokens(Player player, Stones stone, int count) {
 	    Objects.requireNonNull(player);
+	    
 	    if(count <= 0 || count > 2) {
 			throw new IllegalArgumentException();
 		}
@@ -133,15 +134,14 @@ public class Board {
 	    return true;
 	}
 	
-	public Player selectCard(Player player, Card card) {
+	public boolean selectCard(Player player, Card card) {
 	    Objects.requireNonNull(player);
 	    Objects.requireNonNull(card);
 
 	    if (!player.canBuy(card)) {
-	        return player;
+	    	
+	        return false;
 	    }
-
-	    Player newPlayer = player.buyCard(card);
 
 	    for (List<Card> cardList : cards.values()) {
 	        if (cardList.remove(card)) {
@@ -149,7 +149,7 @@ public class Board {
 	        }
 	    }
 
-	    return newPlayer;
+	    return true;
 	}
 
 
