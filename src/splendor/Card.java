@@ -16,7 +16,7 @@ public record Card(int id,Stones stone ,HashMap<Stones,Integer> needStones,int p
 	@Override
 	public String toString() {
 	    StringBuilder res = new StringBuilder();
-	    res.append("------------------\n");
+	    res.append("-".repeat(18)).append("\n");
 	    res.append(String.format("| %-15s|\n", stone));
 	    res.append(String.format("| %-15s|\n", "Prestige: " + prestige));
 	    res.append(String.format("| %-15s|\n", "Cost:"));
@@ -24,7 +24,8 @@ public record Card(int id,Stones stone ,HashMap<Stones,Integer> needStones,int p
 	        String line = entry.getKey() + " x" + entry.getValue();
 	        res.append(String.format("|   %-13s|\n", line));
 	    }
-	    res.append("------------------\n");
+	    res.append("-".repeat(18)).append("\n");
 	    return res.toString();
 	}
+	
 }
