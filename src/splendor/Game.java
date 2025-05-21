@@ -43,8 +43,11 @@ public class Game {
         action.play(choice, player, board);
     }
     
-    private boolean victory(Player player) {
-        return player.getPoints() >= 15;
+    private Player victory() {
+        return players.stream()
+        		.filter(p -> p.getPoints() >= 15)
+        		.findFirst()
+        		.orElse(null);
     }
 
     public void run() {
@@ -55,11 +58,12 @@ public class Game {
             board.revealCards();
             for (var player : players) {
                 playerTurn(player);
-                if (victory(player)) {
-                    System.out.println("Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
-                    gameOver = true;
-                    break;
-                }
+            }
+            
+            Player winner = victory();
+            if (winner != null) {
+                System.out.println("Le joueur " + winner.getName() + " a gagné avec " + winner.getPoints() + " points !");
+                break;
             }
             turn++;
         }
