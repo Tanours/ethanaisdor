@@ -1,0 +1,80 @@
+@startuml
+package splendor {
+
+enum Stones {
+  SAPHIR
+  EMERALD
+  RUBY
+  DIAMOND
+  ONYX
+  GOLDJOKER
+}
+
+class Card {
+  - int id
+  - Stones stone
+  - Map<Stones, Integer> needStones
+  - int prestige
+  + toString(): String
+}
+
+class Player {
+  - String name
+  - int age
+  - Map<Stones, Integer> tokens
+  - List<Card> cards
+  - int points
+  + canBuy(Card): boolean
+  + buyCard(Card): void
+  + addToken(Stones, int): void
+  + getPoints(): int
+  + getName(): String
+  + getAge(): int
+  + toString(): String
+}
+
+class Board {
+  - Map<Integer, List<Card>> cards
+  - Map<Stones, Integer> tokens
+  + selectTokens(Player, Stones, int): boolean
+  + selectCard(Player, Card): boolean
+  + revealCards(): void
+  + getCards(): Map
+}
+
+class Action {
+  - Scanner scanner
+  + play(int, Player, Board): boolean
+}
+
+class Game {
+  - Board board
+  - List<Player> players
+  - Action action
+  - Scanner scanner
+  + run(): void
+}
+
+class PrintGame {
+  - Board board
+  - List<Player> players
+  + printChoice(): void
+  + initPlayers(Scanner): List<Player>
+}
+
+Game --> Board
+Game --> Action
+Game --> Player
+Game --> PrintGame
+Action --> Board
+Action --> Player
+Board -->  Card
+Board --> Stones
+Player --> Card
+Player --> Stones
+Card --> Stones
+PrintGame --> Board
+PrintGame --> Player
+}
+
+@enduml

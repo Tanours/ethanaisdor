@@ -13,6 +13,7 @@ public class Player {
 	public Map<Stones, Integer> tokens;
 	public List<Card> cards;
 	private int points;
+	private final Price bourse;
 	
 	public Player(String name, int age) {
 		Objects.requireNonNull(name, "name of player can't be null");

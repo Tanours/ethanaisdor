@@ -5,64 +5,57 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Game {
-    private final Board board = new Board();
-    private List<Player> players;
-    private final PrintGame printGame;
-    private final Scanner scanner = new Scanner(System.in);
-    private final Action action;
+	private final Board board = new Board();
+	private final List<Player> players;
+	private final PrintGame printGame;
+	private final Scanner scanner = new Scanner(System.in);
+	private final Action action;
 
-    public Game(List<Player> players) {
-        this.players = List.copyOf(players);
-        this.printGame = new PrintGame(board, players);
-        this.action = new Action(scanner);
-    }
+	public Game(List<Player> players) {
+		this.players = List.copyOf(players);
+		this.printGame = new PrintGame(board, players);
+		this.action = new Action(scanner);
+	}
 
-    public Board getBoard() {
-        return board;
-    }
+	private void playerTurn(Player player) {
+		Objects.requireNonNull(player);
+		int choice = -1;
 
-    public List<Player> getPlayers() {
-        return players;
-    }
+		System.out.println("Tour de " + player.getName());
+		System.out.println("Points : " + player.getPoints());
 
-    private void playerTurn(Player player) {
-        Objects.requireNonNull(player);
-        int choice = -1;
+		printGame.printChoice();
+		System.out.println("\nChoisissez une option : ");
 
-        System.out.println("Tour de " + player.getName());
-        System.out.println("Points : " + player.getPoints());
+		if (scanner.hasNextInt()) {
+			choice = scanner.nextInt();
+			scanner.nextLine();
+		}
 
-        printGame.printChoice();
-        System.out.println("\nChoisissez une option : ");
+		action.play(choice, player, board);
+	}
 
-        if (scanner.hasNextInt()) {
-            choice = scanner.nextInt();
-            scanner.nextLine();
-        }
+	private boolean victory(Player player) {
+		return player.getPoints() >= 15;
+	}
 
-        action.play(choice, player, board);
-    }
-    
-    private boolean victory(Player player) {
-        return player.getPoints() >= 15;
-    }
-
-    public void run() {
-        var turn = 1;
-        var gameOver = false;
-        while (!gameOver) {
-            System.out.println("=".repeat(18) + "TOUR : " + turn + "=".repeat(18));
-            board.revealCards();
-            for (var player :players ) {
-                playerTurn(player);
-                if (victory(player)) {
-                    System.out.println("Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
-                    gameOver = true;
-                    break;
-                }
-                System.out.println(player);
-            }
-            turn++;
-        }
-    }
+	public void run() {
+		var turn = 1;
+		var gameOver = false;
+		while (!gameOver) {
+			System.out.println("=".repeat(18) + "TOUR : " + turn + "=".repeat(18));
+			board.revealCards();
+			for (var player : players) {
+				playerTurn(player);
+				if (victory(player)) {
+					System.out.println(
+							"Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
+					gameOver = true;
+				}
+				System.out.println(player);
+			}
+			
+			turn++;
+		}
+	}
 }
