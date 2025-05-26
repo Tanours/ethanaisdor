@@ -1,9 +1,7 @@
 package splendor.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class Player {
@@ -47,22 +45,23 @@ public class Player {
 
 	
 	public void addToken(Stones stone, int quantity) {
-		Objects.requireNonNull(stone);
-		
-		var ruby = wallet.getValue(Stones.RUBY);
-		var saphir = wallet.getValue(Stones.SAPHIR);
-		var diamond = wallet.getValue(Stones.DIAMOND);
-		var emerald = wallet.getValue(Stones.EMERALD);
-		var onyx = wallet.getValue(Stones.ONYX);
-		
-		wallet = new Price(
-				stone.equals(Stones.RUBY)? quantity : ruby,
-				stone.equals(Stones.SAPHIR)? quantity : saphir,
-				stone.equals(Stones.DIAMOND)? quantity : diamond,
-				stone.equals(Stones.EMERALD)? quantity : emerald,
-				stone.equals(Stones.ONYX)? quantity : onyx				
-				);
+	    Objects.requireNonNull(stone);
+
+	    int ruby = wallet.getValue(Stones.RUBY);
+	    int saphir = wallet.getValue(Stones.SAPHIR);
+	    int diamond = wallet.getValue(Stones.DIAMOND);
+	    int emerald = wallet.getValue(Stones.EMERALD);
+	    int onyx = wallet.getValue(Stones.ONYX);
+
+	    wallet = new Price(
+	        ruby + (stone == Stones.RUBY ? quantity : 0),
+	        saphir + (stone == Stones.SAPHIR ? quantity : 0),
+	        diamond + (stone == Stones.DIAMOND ? quantity : 0),
+	        emerald + (stone == Stones.EMERALD ? quantity : 0),
+	        onyx + (stone == Stones.ONYX ? quantity : 0)
+	    );
 	}
+
 	
 	
 	public boolean canBuy(Card card) {

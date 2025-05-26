@@ -1,6 +1,6 @@
 package splendor.model;
 
-import java.util.HashMap;
+
 import java.util.Objects;
 
 public record Card(int id,Stones stone ,Price price,int prestige) {
@@ -15,7 +15,18 @@ public record Card(int id,Stones stone ,Price price,int prestige) {
 	
 	@Override
 	public String toString() {
-		return "[" + stone + ", " + prestige + ", " + price + "]\n";
+	    return "[" + getStoneSquare(stone) + " | Prestige: " + prestige + " | Coût: " + price + "]";
+	}
+
+	private String getStoneSquare(Stones stone) {
+	    return switch (stone) {
+	        case DIAMOND -> "⬜";   
+	        case EMERALD -> "🟩";  
+	        case RUBY -> "🟥";      
+	        case SAPHIR -> "🟦";  
+	        case ONYX -> "⬛";    
+	        case GOLDJOKER -> "🟨"; 
+	    };
 	}
 	
 //	@Override

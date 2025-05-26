@@ -8,9 +8,14 @@ import java.util.Set;
 public class Action {
 
     private final Scanner scanner;
+    private final GameMode mode;
 
-    public Action(Scanner scanner) {
+    public Action(Scanner scanner, GameMode mode) {
+    	 Objects.requireNonNull(mode);
         this.scanner = scanner;
+        
+       
+        this.mode = mode;
     }
 
     public boolean one(Board board, Player player) {
@@ -19,8 +24,15 @@ public class Action {
             System.out.println("Choisissez une couleur différente : (" + (pickedColors.size()+1) + "/3)");
             try {
                 Stones stone = Stones.valueOf(scanner.next().toUpperCase());
+                if (mode == GameMode.BASE && stone == Stones.GOLDJOKER) {
+                    continue;
+                }
                 if (pickedColors.contains(stone)) continue;
-                if (!board.selectTokens(player, stone, 1)) continue;
+                
+                if (!board.selectTokens(player, stone, 1)) {
+                	System.out.println("Pas assez de jetons disponibles pour cette couleur.");
+                	continue;
+                }
                 pickedColors.add(stone);
             } catch (IllegalArgumentException e) {
                 System.out.println("Couleur invalide.");
@@ -30,15 +42,27 @@ public class Action {
     }
 
     private boolean two(Board board, Player player) {
-        System.out.println("Choisissez une couleur pour prendre 2 jetons :");
-        try {
-            Stones stone = Stones.valueOf(scanner.next().toUpperCase());
-            return board.selectTokens(player, stone, 2);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Couleur invalide.");
+        while (true) {
+            System.out.println("Choisissez une couleur pour prendre 2 jetons :");
+            try {
+                Stones stone = Stones.valueOf(scanner.next().toUpperCase());
+
+                if (mode == GameMode.BASE && stone == Stones.GOLDJOKER) {
+                    continue;
+                }
+
+                if (board.selectTokens(player, stone, 2)) {
+                    return true;
+                } else {
+                    System.out.println("Pas assez de jetons disponibles pour cette couleur.");
+                }
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("Couleur invalide.");
+            }
         }
-        return false;
     }
+
 
     private boolean three(Board board, Player player) {
         System.out.println("\nChoisissez une carte à acheter : ");
