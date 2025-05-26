@@ -67,7 +67,7 @@ public class Player {
 	
 	public boolean canBuy(Card card) {
 		Objects.requireNonNull(card);
-		return wallet.isBelow(card.price());
+		return !wallet.isBelow(card.price());
 	}
 	
 	
@@ -115,6 +115,10 @@ public class Player {
 	public int getAge() {
         return age;
     }
+	
+	public Price getWallet() {
+		return wallet;
+	}
 
 
 	

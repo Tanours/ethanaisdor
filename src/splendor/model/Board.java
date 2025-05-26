@@ -95,9 +95,11 @@ public class Board {
 	}
 
 	public void revealCards() {
-		for (int i = 0; i < 4; i++) {
-			System.out.print(i + 1 + " : " + cards.get(1).get(i));
-		}
+		var reveal = cards.get(1).stream().limit(4).toList();
+		System.out.println(Card.displayCards(reveal));
+//		for (int i = 0; i < 4; i++) {
+//			System.out.print(i + 1 + " :\n\n " + cards.get(1).get(i));
+//		}
 	}
 
 	public boolean selectTokens(Player player, Stones stone, int count) {
