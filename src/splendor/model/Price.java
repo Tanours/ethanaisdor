@@ -39,12 +39,15 @@ public class Price {
 	
 	public boolean isBelow(Price price) {
 		Objects.requireNonNull(price);
+		var countCheck = 0;
 		for(var el : map.entrySet()) {
-			if(el.getValue() > price.getValue(el.getKey())) {
-				return false;
+			if(!(el.getValue() > price.getValue(el.getKey()))) {
+				countCheck++;
 			}
+			
 		}
-		return true;
+		return Integer.compare(countCheck,map.entrySet().size()-1) == 0 ? true : false;
+		
 	}
 	
 	public Price substract(Price price) {
@@ -55,6 +58,7 @@ public class Price {
 		var newEmerald = this.getValue(Stones.EMERALD) - price.getValue(Stones.EMERALD);
 		var newOnyx = this.getValue(Stones.ONYX) - price.getValue(Stones.ONYX);
 		
+		
 		return new Price(newRuby,newSaphir,newDiamond,newEmerald,newOnyx);
 	}
 	
@@ -64,13 +68,16 @@ public class Price {
 	
 	@Override
 	public String toString() {
-		var builder = new StringBuilder("[");
-		var buffer = "";
-		for(var el : map.entrySet()) {
-			builder.append(buffer).append(el.getKey()).append(" : ").append(el.getValue());
-			buffer = "\n";
-		}
-		builder.append("]");
-		return builder.toString();
+		StringBuilder res = new StringBuilder();
+	    res.append("[");
+	    res.append("S:%-2s E:%-2s R:%-2s D:%-2s O:%-2s".formatted(
+	    		this.getValue(Stones.SAPHIR),
+	    		this.getValue(Stones.EMERALD),
+	    		this.getValue(Stones.RUBY),
+	    		this.getValue(Stones.DIAMOND),
+	    		this.getValue(Stones.ONYX)
+	    		));
+	    res.append("]");
+	    return res.toString();
 	}
 }

@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-
 import splendor.view.PrintGame;
 
 public class Game {
@@ -71,6 +70,7 @@ public class Game {
 		int choice = -1;
 
 		System.out.println("Tour de " + player.getName());
+		System.out.println("tokens du joueurs : "+player.getWallet());
 		System.out.println("Points : " + player.getPoints());
 
 		printGame.printChoice();
@@ -92,7 +92,9 @@ public class Game {
 		var turn = 1;
 		var gameOver = false;
 		while (!gameOver) {
-			System.out.println("=".repeat(18) + "TOUR : " + turn + "=".repeat(18));
+			System.out.println("=".repeat(147));
+			System.out.println("%67s".formatted(" TOUR : " + turn) );
+			System.out.println("=".repeat(147));
 			board.revealCards();
 			for (var player : players) {
 				playerTurn(player);
