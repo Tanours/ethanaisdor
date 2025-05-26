@@ -8,12 +8,12 @@ import java.util.Objects;
 
 public class Player {
 	
-	public final String name;
-	public final int age;
-	public Map<Stones, Integer> tokens;
-	public List<Card> cards;
+	private final String name;
+	private final int age;
+	//public Map<Stones, Integer> tokens;
+	private final List<Card> cards;
 	private int points;
-	private final Price bourse;
+	private Price wallet;
 	
 	public Player(String name, int age) {
 		Objects.requireNonNull(name, "name of player can't be null");
@@ -24,16 +24,16 @@ public class Player {
 		
 		this.name = name;
 		this.age = age;
-		this.points = 0;
-		this.cards = new ArrayList<Card>();
-		this.tokens = new HashMap<Stones, Integer>();
-		this.bourse = null; //TODO
+
+		points = 0;
+		cards = new ArrayList<Card>();
+		wallet = new Price();
 	}
 	
 	
-	public Player(String name, int age, int points, Map<Stones, Integer> tokens, List<Card> cards) {
+	public Player(String name, int age, int points,Price wallet, List<Card> cards) {
 		Objects.requireNonNull(name, "name of player can't be null");
-		
+		Objects.requireNonNull(wallet);
 		if(points < 0) {
 			throw new IllegalArgumentException("point can't be negative");
 		}
@@ -41,46 +41,41 @@ public class Player {
 		this.name = name;
 		this.age = age;
 		this.points = points;
-		this.tokens = tokens;
 		this.cards = cards;
-		this.bourse = null;
+		this.wallet = wallet;
 	}
 
 	
 	public void addToken(Stones stone, int quantity) {
 		Objects.requireNonNull(stone);
 		
-		tokens.put(stone, tokens.getOrDefault(stone, 0) + quantity);
+		var ruby = wallet.getValue(Stones.RUBY);
+		var saphir = wallet.getValue(Stones.SAPHIR);
+		var diamond = wallet.getValue(Stones.DIAMOND);
+		var emerald = wallet.getValue(Stones.EMERALD);
+		
+		wallet = switch (stone) {
+			case RUBY -> new Price(ruby+quantity,saphir,diamond,emerald);
+			case SAPHIR -> new Price(ruby,saphir+quantity,diamond,emerald);
+			case DIAMOND -> new Price(ruby,saphir,diamond+quantity,emerald);
+			case EMERALD -> new Price(ruby,saphir,diamond,emerald+quantity);
+			default -> null;
+		};
 	}
 	
 	
 	public boolean canBuy(Card card) {
 		Objects.requireNonNull(card);
-		
-		for(Map.Entry<Stones, Integer> cost :  card.needStones().entrySet()) {
-			Stones stone = cost.getKey();
-			int required = cost.getValue();
-			
-			if(tokens.getOrDefault(stone, 0) < required) {
-				return false;
-			}
-		}
-		return true;
+		return wallet.isBelow(card.price());
 	}
 	
 	
 	public void buyCard(Card card) {
 		Objects.requireNonNull(card);
-
-	    for (var cost : card.needStones().entrySet()) {
-	        var stone = cost.getKey();
-	        if(tokens.get(stone) - cost.getValue() > 0) {
-	        	tokens.replace(stone,tokens.get(stone) - cost.getValue());
-	        }
-	        else {
-	        	tokens.remove(stone);
-	        }
-	    }
+		if(this.canBuy(card)) {
+			wallet = wallet.substract(card.price());
+		}
+	    
 	    cards.add(card);
 	    points+=card.prestige();
 	    
@@ -93,10 +88,7 @@ public class Player {
 	    
 	    res.append("\t Points : ").append(points).append("\n");
 	    
-	    res.append("\t Tokens : ");
-	    for (var stone : Stones.values()) {
-	        res.append(stone).append("=").append(tokens.getOrDefault(stone, 0)).append(" ");
-	    }
+	    res.append("\t Tokens : ").append(wallet);
 	    res.append("\n");
 	    
 	    res.append("\t Cards : \n");

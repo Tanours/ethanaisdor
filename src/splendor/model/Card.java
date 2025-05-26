@@ -3,19 +3,20 @@ package splendor.model;
 import java.util.HashMap;
 import java.util.Objects;
 
-public record Card(int id,Stones stone ,Price needStones,int prestige) {
+
+public record Card(int id,Stones stone ,Price price,int prestige) {
 	public Card{
 		if(id<0||prestige<0) {
 			throw new IllegalArgumentException();
 		}
 		Objects.requireNonNull(stone);
-		Objects.requireNonNull(needStones);
+		Objects.requireNonNull(price);
 		
 	}
 	
 	@Override
 	public String toString() {
-		return "[" + stone + ", " + prestige + ", " + needStones + "]\n";
+		return "[" + stone + ", " + prestige + ", " + price + "]\n";
 	}
 	
 //	@Override

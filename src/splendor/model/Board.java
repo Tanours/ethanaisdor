@@ -1,6 +1,7 @@
 package splendor.model;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ public class Board {
 
 	}
 
-	public List<Card> generateCardsList(int startIndex, int level, int numberCard) {
+	/*public List<Card> generateCardsList(int startIndex, int level, int numberCard) {
 		var res = new ArrayList<Card>();
 		if (level < 1 || startIndex < 0 || numberCard < 0) {
 			throw new IllegalArgumentException();
@@ -57,7 +59,7 @@ public class Board {
 			startIndex++;
 		}
 		return res;
-	}
+	}*/
 
 	public List<Card> generateCardsListWithCost(int startIndex, int level, int numberCardByColor, int cost) {
 		var resCard = new ArrayList<Card>();
@@ -66,7 +68,7 @@ public class Board {
 			for (int ColorIndex = 0; ColorIndex < 5; ColorIndex++) {
 				var stone = Stones.values()[ColorIndex];
 
-				resCard.add(new Card(index, stone, new HashMap<>(Map.of(stone, cost)), 1));
+				resCard.add(new Card(index, stone, new Price(stone,cost), 1));
 			}
 		}
 		return resCard;
@@ -119,7 +121,7 @@ public class Board {
 		}
 
 		tokens.computeIfPresent(stone, (s, curr) -> curr = curr - count);
-		player.tokens.merge(stone, count, Integer::sum);
+		player.addToken(stone, count);
 		
 		return true;
 	}
@@ -151,18 +153,13 @@ public class Board {
 		var listString = new ArrayList<List<String>>();
 
 		try (var reader = Files.newInputStream(file)) {
-			var byt = reader.readAllBytes();
-			var html = new String(byt);
-			var rowPattern = Pattern.compile("<tr.*?>(.*?)</tr>");
-			var matcher = rowPattern.matcher(html);
+			var matcher = lineReferenceReader(reader);
 			var level = "";
 			var gem = "";
 			while (matcher.find()) {
-				var row = new ArrayList<String>();
-				var content = matcher.group(1);
-				var cellPattern = Pattern.compile("<td.*?>(.*?)</td>");
-				var cellMatcher = cellPattern.matcher(content);
-				var priceRow = 3;
+				var cellMatcher = cellReferenceReader(matcher);
+				var row = getCardInformation(cellMatcher, level, gem);
+				/*var priceRow = 3;
 				var illustrationRow = 4;
 				var columnIndex = 0;
 				while (cellMatcher.find()) {
@@ -198,7 +195,7 @@ public class Board {
 					}
 					columnIndex++;
 				}
-				row = new ArrayList<>(row.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList()));
+				row = new ArrayList<>(row.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList()));*/
 				if (!row.isEmpty()) {
 					listString.add(row);
 				}
@@ -219,7 +216,50 @@ public class Board {
 		}
 		return res;
 	}
+	private Matcher lineReferenceReader(InputStream reader) throws IOException{
+		var byt = reader.readAllBytes();
+		var html = new String(byt);
+		var rowPattern = Pattern.compile("<tr.*?>(.*?)</tr>");
+		var matcher = rowPattern.matcher(html);
+		return matcher;
+	}
+	
+	private Matcher cellReferenceReader(Matcher matcher) {
+		var content = matcher.group(1);
+		var cellPattern = Pattern.compile("<td.*?>(.*?)</td>");
+		var cellMatcher = cellPattern.matcher(content);
+		return cellMatcher;
+	}
+	private List<String> getCardInformation(Matcher cellMatcher,String level,String gem) {
+		var row = new ArrayList<String>();
+		var priceRow = 3;
+		var illustrationRow = 4;
+		var columnIndex = 0;
+		while (cellMatcher.find()) {
+			if (columnIndex != priceRow && columnIndex != illustrationRow) {
+				var cellValue = cellMatcher.group(1).trim().replaceAll("<[^>]*>", "");
+				switch (columnIndex) {
+				case 2, 5, 6, 7, 8, 9:
+					row.add(cellValue.isEmpty() ? "0":cellValue);
+					break;
+				case 1:
+					gem = !cellValue.isEmpty() ? cellValue : gem;
+					row.add(gem);
+					break;
+				case 0:
+					level = (!cellValue.isEmpty() && cellValue.matches("\\d+")) ? cellValue : level;
+					row.add(level);
+					break;
+				default:
+					break;
+				}
 
+			}
+			columnIndex++;
+		}
+		return row.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList());
+	}
+	
 	public Card listToCard(int id, List<String> list) {
 		Objects.requireNonNull(list);
 		if (id < 0) {
