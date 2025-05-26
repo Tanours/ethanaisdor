@@ -53,14 +53,15 @@ public class Player {
 		var saphir = wallet.getValue(Stones.SAPHIR);
 		var diamond = wallet.getValue(Stones.DIAMOND);
 		var emerald = wallet.getValue(Stones.EMERALD);
+		var onyx = wallet.getValue(Stones.ONYX);
 		
-		wallet = switch (stone) {
-			case RUBY -> new Price(ruby+quantity,saphir,diamond,emerald);
-			case SAPHIR -> new Price(ruby,saphir+quantity,diamond,emerald);
-			case DIAMOND -> new Price(ruby,saphir,diamond+quantity,emerald);
-			case EMERALD -> new Price(ruby,saphir,diamond,emerald+quantity);
-			default -> null;
-		};
+		wallet = new Price(
+				stone.equals(Stones.RUBY)? quantity : ruby,
+				stone.equals(Stones.SAPHIR)? quantity : saphir,
+				stone.equals(Stones.DIAMOND)? quantity : diamond,
+				stone.equals(Stones.EMERALD)? quantity : emerald,
+				stone.equals(Stones.ONYX)? quantity : onyx				
+				);
 	}
 	
 	
