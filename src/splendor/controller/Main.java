@@ -1,9 +1,11 @@
-package splendor;
+package splendor.controller;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
+
+import splendor.model.Game;
+import splendor.model.Player;
+import splendor.view.PrintGame;
 
 
 public class Main {

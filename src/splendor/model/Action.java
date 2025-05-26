@@ -1,4 +1,4 @@
-package splendor;
+package splendor.model;
 
 import java.util.HashSet;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package splendor;
+package splendor.model;
 
 import java.io.IOException;
 import java.nio.file.Files;

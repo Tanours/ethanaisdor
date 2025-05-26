@@ -1,7 +1,6 @@
-package splendor;
+package splendor.controller;
 
-import java.io.IOException;
-import java.util.StringJoiner;
+import splendor.model.Board;
 
 public class MainTest {
 	public static void main(String[] args) {

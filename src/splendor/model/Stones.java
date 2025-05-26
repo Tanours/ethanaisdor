@@ -1,4 +1,4 @@
-package splendor;
+package splendor.model;
 
 public enum Stones {
 	SAPHIR,

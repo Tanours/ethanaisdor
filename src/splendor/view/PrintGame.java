@@ -1,10 +1,13 @@
-package splendor;
+package splendor.view;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
+import splendor.model.Board;
+import splendor.model.Player;
 
 public record PrintGame(Board board, List<Player> players) {
 	public PrintGame {

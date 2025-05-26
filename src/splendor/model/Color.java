@@ -1,4 +1,4 @@
-package splendor;
+package splendor.model;
 
 public enum Color {
 	RESET("\u001B[0m"),

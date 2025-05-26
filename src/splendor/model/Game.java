@@ -1,8 +1,10 @@
-package splendor;
+package splendor.model;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
+import splendor.view.PrintGame;
 
 public class Game {
 	private final Board board = new Board();

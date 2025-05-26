@@ -1,4 +1,4 @@
-package splendor;
+package splendor.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +27,7 @@ public class Player {
 		this.points = 0;
 		this.cards = new ArrayList<Card>();
 		this.tokens = new HashMap<Stones, Integer>();
+		this.bourse = null; //TODO
 	}
 	
 	
@@ -42,6 +43,7 @@ public class Player {
 		this.points = points;
 		this.tokens = tokens;
 		this.cards = cards;
+		this.bourse = null;
 	}
 
 	
