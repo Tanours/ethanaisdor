@@ -54,11 +54,11 @@ public class Player {
 	    int onyx = wallet.getValue(Stones.ONYX);
 
 	    wallet = new Price(
-	        ruby + (stone == Stones.RUBY ? quantity : 0),
-	        saphir + (stone == Stones.SAPHIR ? quantity : 0),
-	        diamond + (stone == Stones.DIAMOND ? quantity : 0),
-	        emerald + (stone == Stones.EMERALD ? quantity : 0),
-	        onyx + (stone == Stones.ONYX ? quantity : 0)
+	        ruby + (stone.equals(Stones.RUBY) ? quantity : 0),
+	        saphir + (stone.equals(Stones.SAPHIR) ? quantity : 0),
+	        diamond + (stone.equals(Stones.DIAMOND) ? quantity : 0),
+	        emerald + (stone.equals(Stones.EMERALD) ? quantity : 0),
+	        onyx + (stone.equals(Stones.ONYX) ? quantity : 0)
 	    );
 	}
 

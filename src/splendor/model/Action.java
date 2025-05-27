@@ -8,14 +8,10 @@ import java.util.Set;
 public class Action {
 
     private final Scanner scanner;
-    private final GameMode mode;
 
-    public Action(Scanner scanner, GameMode mode) {
-    	 Objects.requireNonNull(mode);
+    public Action(Scanner scanner) {
         this.scanner = scanner;
         
-       
-        this.mode = mode;
     }
 
     public boolean one(Board board, Player player) {
@@ -24,9 +20,7 @@ public class Action {
             System.out.println("Choisissez une couleur différente : (" + (pickedColors.size()+1) + "/3)");
             try {
                 Stones stone = Stones.valueOf(scanner.next().toUpperCase());
-                if (mode == GameMode.BASE && stone == Stones.GOLDJOKER) {
-                    continue;
-                }
+
                 if (pickedColors.contains(stone)) continue;
                 
                 if (!board.selectTokens(player, stone, 1)) {
@@ -47,9 +41,6 @@ public class Action {
             try {
                 Stones stone = Stones.valueOf(scanner.next().toUpperCase());
 
-                if (mode == GameMode.BASE && stone == Stones.GOLDJOKER) {
-                    continue;
-                }
 
                 if (board.selectTokens(player, stone, 2)) {
                     return true;

@@ -13,13 +13,12 @@ public class Game {
 	private final PrintGame printGame;
 	private final Scanner scanner = new Scanner(System.in);
 	private final Action action;
-	private final GameMode mode;
 
-	public Game(List<Player> players, GameMode mode) {
+
+	public Game(List<Player> players) {
 	    this.players = List.copyOf(players);
-	    this.mode = mode;
 	    this.printGame = new PrintGame(board, players);
-	    this.action = new Action(scanner, mode); 
+	    this.action = new Action(scanner); 
 	}
 	
 	public static List<Player> initPlayers(Scanner scanner) {
