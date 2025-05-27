@@ -39,14 +39,8 @@ public class Price {
 	
 	public boolean isBelow(Price price) {
 		Objects.requireNonNull(price);
-		var countCheck = 0;
-		for(var el : map.entrySet()) {
-			if(!(el.getValue() > price.getValue(el.getKey()))) {
-				countCheck++;
-			}
-			
-		}
-		return Integer.compare(countCheck,map.entrySet().size()-1) == 0 ? true : false;
+		return this.map.entrySet().stream()
+				.allMatch(s -> s.getValue() <= price.getValue(s.getKey()));
 		
 	}
 	
@@ -70,7 +64,7 @@ public class Price {
 	public String toString() {
 		StringBuilder res = new StringBuilder();
 	    res.append("[");
-	    res.append("S:%-2s E:%-2s R:%-2s D:%-2s O:%-2s".formatted(
+	    res.append(" S:%-2s E:%-2s R:%-2s D:%-2s O:%-2s".formatted(
 	    		this.getValue(Stones.SAPHIR),
 	    		this.getValue(Stones.EMERALD),
 	    		this.getValue(Stones.RUBY),

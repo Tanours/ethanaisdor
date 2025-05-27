@@ -63,8 +63,14 @@ public class Action {
             scanner.nextLine();
             var card = board.getCards().get(1).get(cardIndex);
             if (!board.selectCard(player, card)) {
-                System.out.println("Vous ne pouvez pas acheter cette carte.");
-                return false;
+                System.out.println(Color.RED.getValue()+"Vous ne pouvez pas acheter cette carte."+Color.RESET.getValue());
+                try {
+					Thread.sleep(2000);
+			        
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
             return true;
         }

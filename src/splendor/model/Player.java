@@ -66,7 +66,7 @@ public class Player {
 	
 	public boolean canBuy(Card card) {
 		Objects.requireNonNull(card);
-		return !wallet.isBelow(card.price());
+		return card.price().isBelow(wallet);
 	}
 	
 	
@@ -84,19 +84,19 @@ public class Player {
 	@Override
 	public String toString() {
 	    var res = new StringBuilder();
-	    res.append(name).append("\n");
+	    res.append("\t Nom du joueur : ").append(name).append("\n");
 	    
 	    res.append("\t Points : ").append(points).append("\n");
 	    
 	    res.append("\t Tokens : ").append(wallet);
 	    res.append("\n");
 	    
-	    res.append("\t Cards : \n");
-	    if (cards.isEmpty()) {
-	        res.append("\t\t none");
-	    } else {
+	    res.append("\t Bonus : \n");
+	    if (!cards.isEmpty()) {
+	    	var buffer = "";
 	        for (Card card : cards) {
-	            res.append("\t\t" + card.toString());
+	            res.append(buffer).append("\t\t-" + card.stone());
+	            buffer = "\n";
 	        }
 	    }
 	    res.append("\n");

@@ -68,9 +68,7 @@ public class Game {
 		Objects.requireNonNull(player);
 		int choice = -1;
 
-		System.out.println("Tour de " + player.getName());
-		System.out.println("tokens du joueurs : "+player.getWallet());
-		System.out.println("Points : " + player.getPoints());
+		System.out.println(player);
 
 		printGame.printChoice();
 		System.out.println("\nChoisissez une option : ");
@@ -80,7 +78,7 @@ public class Game {
 			scanner.nextLine();
 		}
 
-		action.play(choice, player, board);
+		while (!action.play(choice, player, board));
 	}
 
 	private boolean victory(Player player) {
@@ -91,18 +89,21 @@ public class Game {
 		var turn = 1;
 		var gameOver = false;
 		while (!gameOver) {
-			System.out.println("=".repeat(147));
+			for (int i = 0; i < 50; i++) { 
+	            System.out.println("\n");
+	        }
+			System.out.println(Color.EMERALD.getValue()+"=".repeat(147));
 			System.out.println("%67s".formatted(" TOUR : " + turn) );
-			System.out.println("=".repeat(147));
+			System.out.println("=".repeat(147)+Color.RESET.getValue());
 			board.revealCards();
 			for (var player : players) {
+				
 				playerTurn(player);
 				if (victory(player)) {
 					System.out.println(
 							"Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
 					gameOver = true;
 				}
-				System.out.println(player);
 			}
 			
 			turn++;
