@@ -84,22 +84,29 @@ public class Player {
 	@Override
 	public String toString() {
 	    var res = new StringBuilder();
-	    res.append("\t Nom du joueur : ").append(name).append("\n");
+	    var boardHorizontal = "╔════════════════════════════════CARTE DE JOUEUR═══╗\n";
+	    var boardHorizontalEnd = "╚══════════════════════════════════════════════════╝\n";
+	    var centre = "".repeat(6);
 	    
-	    res.append("\t Points : ").append(points).append("\n");
+	    res.append(centre).append(boardHorizontal);
 	    
-	    res.append("\t Tokens : ").append(wallet);
-	    res.append("\n");
+	    res.append(centre).append("╠ Nom du joueur : %-32s ║\n️".formatted(name));
 	    
-	    res.append("\t Bonus : \n");
+	    res.append(centre).append("╠ Points : %-39s ║\n".formatted(points));
+	    
+	    res.append(centre).append("╠ Tokens : %-39s ║\n".formatted(wallet));
+	    
+	    
+	    res.append(centre).append("╠ Bonus : %-40s ║\n".formatted(""));
 	    if (!cards.isEmpty()) {
 	    	var buffer = "";
 	        for (Card card : cards) {
-	            res.append(buffer).append("\t\t-" + card.stone());
+	            res.append(buffer).append(centre).append("║\t\t- %-32s ║".formatted(card.stone()));
 	            buffer = "\n";
 	        }
+	        res.append("\n");
 	    }
-	    res.append("\n");
+	    res.append(centre).append(boardHorizontalEnd).append(Stones.resetColor());
 	    return res.toString();
 	}
 	

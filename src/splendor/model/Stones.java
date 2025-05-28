@@ -13,7 +13,16 @@ public enum Stones {
 	private Stones(String stone) {
 		Objects.requireNonNull(stone);
 	}
-	public String getColor(Stones stone) {
-		return Color.valueOf(stone.toString()).getValue();
+	public static String resetColor() {
+		return "\u001B[0m";
+	}
+	public String getColor() {
+		return switch (this) {
+			case SAPHIR -> "\u001B[94m";
+			case EMERALD -> "\u001B[92m";
+			case RUBY -> "\u001B[91m";
+			case DIAMOND -> "\u001B[36m";
+			default -> "\u001B[90m";
+		};
 	}
 }

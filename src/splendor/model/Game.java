@@ -92,12 +92,11 @@ public class Game {
 			for (int i = 0; i < 50; i++) { 
 	            System.out.println("\n");
 	        }
-			System.out.println(Color.EMERALD.getValue()+"=".repeat(147));
+			System.out.println(Stones.DIAMOND.getColor()+"═".repeat(147));
 			System.out.println("%67s".formatted(" TOUR : " + turn) );
-			System.out.println("=".repeat(147)+Color.RESET.getValue());
+			System.out.println("═".repeat(147)+Stones.resetColor());
 			board.revealCards();
 			for (var player : players) {
-				
 				playerTurn(player);
 				if (victory(player)) {
 					System.out.println(

@@ -25,7 +25,7 @@ public record Card(int id,Stones stone ,Price price,int prestige) {
 		if(value.equals("header")) {
 			for(var i = 1;i<= cards.size();i++) {
 				var card = cards.get(i-1);
-				var stoneElement = "| %-8s PRESTIGE +%-2s   %8s |".formatted(i,card.prestige(),card.stone());
+				var stoneElement = "║ %-8s PRESTIGE +%-2s   %8s ║".formatted(i,card.prestige(),card.stone());
 				res.append(stoneElement).append(" ");
 			}
 		}
@@ -33,7 +33,7 @@ public record Card(int id,Stones stone ,Price price,int prestige) {
 			for(int i = 0; i<5;i++) {
 				var stone = Stones.values()[i].toString();
 				for(var card : cards) {
-					var stoneElement = "| %-8s : %-21s |".formatted(stone,card.price.getValue(Stones.valueOf(stone)));
+					var stoneElement = "║ %-8s : %-21s ║".formatted(stone,card.price.getValue(Stones.valueOf(stone)));
 					res.append(stoneElement).append(" ");
 				}
 				res.append("\n");
@@ -47,7 +47,8 @@ public record Card(int id,Stones stone ,Price price,int prestige) {
 	}
 	public static String displayCards(List<Card> cards) {
 		var res = new StringBuilder();
-		var boardHorizontal = "+----------------------------------+"; 
+		var boardHorizontal = "╔══════════════════════════════════╗"; 
+		var boardHorizontalEnd = "╚══════════════════════════════════╝";
 		for(var card : cards) {
 			res.append(boardHorizontal).append(" ");
 			
@@ -56,13 +57,13 @@ public record Card(int id,Stones stone ,Price price,int prestige) {
 		res.append(info);
 		res.append("\n");
 		for(var card : cards) {
-			res.append("+------------- cost ---------------+").append(" ");
+			res.append("╠------------- cost ---------------╣").append(" ");
 			
 		}
 		var cost = getCardElement("cost", cards);
 		res.append(cost);
 		for(var card : cards) {
-			res.append(boardHorizontal).append(" ");
+			res.append(boardHorizontalEnd).append(" ");
 			
 		}
 		

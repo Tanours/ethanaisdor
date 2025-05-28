@@ -197,7 +197,7 @@ public class Board {
 				index++;
 			}
 		} catch (IOException e) {
-			System.out.println(Color.RED.getValue() + "Error : " + Color.RESET.getValue() + "cannot read file");
+			System.out.println( "Error : cannot read file");
 		}
 		return res;
 	}

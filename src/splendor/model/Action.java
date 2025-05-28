@@ -63,7 +63,7 @@ public class Action {
             scanner.nextLine();
             var card = board.getCards().get(1).get(cardIndex);
             if (!board.selectCard(player, card)) {
-                System.out.println(Color.RED.getValue()+"Vous ne pouvez pas acheter cette carte."+Color.RESET.getValue());
+                System.out.println("\t\tVous ne pouvez pas acheter cette carte.");
                 try {
 					Thread.sleep(2000);
 			        
