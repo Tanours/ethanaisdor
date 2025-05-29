@@ -26,8 +26,9 @@ public class Game {
 
 	    System.out.print("Combien de joueurs ? ");
 	    int nbPlayers = 0;
+	    nbPlayers = Integer.parseInt(scanner.nextLine());
 
-	    while (nbPlayers < 2 || nbPlayers > 4) {
+	    /*while (nbPlayers < 2 || nbPlayers > 4) {
 	        try {
 	            nbPlayers = Integer.parseInt(scanner.nextLine());
 	            if (nbPlayers < 2 || nbPlayers > 4) {
@@ -36,7 +37,7 @@ public class Game {
 	        } catch (NumberFormatException e) {
 	            System.out.println("Entrée invalide. Veuillez entrer un nombre.");
 	        }
-	    }
+	    }*/
 
 	    for (int i = 0; i < nbPlayers; i++) {
 	        System.out.print("Nom du joueur " + (i + 1) + " : ");
@@ -65,21 +66,27 @@ public class Game {
 
 
 	private void playerTurn(Player player) {
-		Objects.requireNonNull(player);
-		int choice = -1;
+	    Objects.requireNonNull(player);
+	    int choice = -1;
 
-		System.out.println(player);
+	    boolean validAction = false;
+	    
+	    while (!validAction) {
+	        System.out.println(player);
+	        printGame.printChoice();
+	        System.out.println("\nChoisissez une option : ");
 
-		printGame.printChoice();
-		System.out.println("\nChoisissez une option : ");
-
-		if (scanner.hasNextInt()) {
-			choice = scanner.nextInt();
-			scanner.nextLine();
-		}
-
-		while (!action.play(choice, player, board));
+	        if (scanner.hasNextInt()) {
+	            choice = scanner.nextInt();
+	            scanner.nextLine();
+	            validAction = action.play(choice, player, board);
+	        } else {
+	            scanner.nextLine();
+	            System.out.println("Veuillez entrer un nombre valide.");
+	        }
+	    }
 	}
+
 
 	private boolean victory(Player player) {
 		return player.getPoints() >= 15;

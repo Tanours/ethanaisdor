@@ -7,87 +7,108 @@ import java.util.Set;
 
 public class Action {
 
-    private final Scanner scanner;
+	private final Scanner scanner;
 
-    public Action(Scanner scanner) {
-        this.scanner = scanner;
-        
-    }
+	public Action(Scanner scanner) {
+		this.scanner = scanner;
 
-    public boolean one(Board board, Player player) {
-        Set<Stones> pickedColors = new HashSet<>();
-        while (pickedColors.size() < 3) {
-            System.out.println("Choisissez une couleur différente : (" + (pickedColors.size()+1) + "/3)");
-            try {
-                Stones stone = Stones.valueOf(scanner.next().toUpperCase());
+	}
 
-                if (pickedColors.contains(stone)) continue;
-                
-                if (!board.selectTokens(player, stone, 1)) {
-                	System.out.println("Pas assez de jetons disponibles pour cette couleur.");
-                	continue;
-                }
-                pickedColors.add(stone);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Couleur invalide.");
-            }
-        }
-        return true;
-    }
+	public boolean one(Board board, Player player) {
+	    Set<Stones> pickedColors = new HashSet<>();
+	    while (pickedColors.size() < 3) {
+	        System.out.println("Choisissez une couleur différente : (" + (pickedColors.size() + 1) + "/3). Changer d'option: q");
+	        try {
+	            var input = scanner.next().toUpperCase();
 
-    private boolean two(Board board, Player player) {
-        while (true) {
-            System.out.println("Choisissez une couleur pour prendre 2 jetons :");
-            try {
-                Stones stone = Stones.valueOf(scanner.next().toUpperCase());
+	            if (input.equals("Q")) {
+	                return false;  
+	            }
 
+	            Stones stone = Stones.valueOf(input);
 
-                if (board.selectTokens(player, stone, 2)) {
-                    return true;
-                } else {
-                    System.out.println("Pas assez de jetons disponibles pour cette couleur.");
-                }
+	            if (pickedColors.contains(stone))
+	                continue;
 
-            } catch (IllegalArgumentException e) {
-                System.out.println("Couleur invalide.");
-            }
-        }
-    }
+	            if (!board.selectTokens(player, stone, 1)) {
+	                System.out.println("Pas assez de jetons disponibles pour cette couleur.");
+	                continue;
+	            }
+
+	            pickedColors.add(stone);
+
+	        } catch (IllegalArgumentException e) {
+	            System.out.println("Couleur invalide.");
+	        }
+	    }
 
 
-    private boolean three(Board board, Player player) {
-        System.out.println("\nChoisissez une carte à acheter : ");
-        board.revealCards();
-        if (scanner.hasNextInt()) {
-            int cardIndex = scanner.nextInt() - 1;
-            scanner.nextLine();
-            var card = board.getCards().get(1).get(cardIndex);
-            if (!board.selectCard(player, card)) {
-                System.out.println("\t\tVous ne pouvez pas acheter cette carte.");
-                try {
+	    for (var s : pickedColors) {
+	        board.takeOneToken(player, s);
+	    }
+	    return true;
+	}
+
+
+	private boolean two(Board board, Player player) {
+		System.out.println("Choisissez une couleur pour prendre 2 jetons. Changer d'option: q");
+
+		try {
+			var input = scanner.next().toUpperCase();
+
+			if (input.equals("Q")) {
+				return false; 
+			}
+
+			Stones stone = Stones.valueOf(input);
+
+			if (board.selectTokens(player, stone, 2)) {
+				board.takeMultipleSameTokens(player, stone, 2);
+				return true; 
+			} else {
+				System.out.println("Pas assez de jetons disponibles pour cette couleur.");
+			}
+
+		} catch (IllegalArgumentException e) {
+			System.out.println("Couleur invalide.");
+		}
+		return false;
+
+	}
+
+	private boolean three(Board board, Player player) {
+		System.out.println("\nChoisissez une carte à acheter : ");
+		board.revealCards();
+		if (scanner.hasNextInt()) {
+			int cardIndex = scanner.nextInt() - 1;
+			scanner.nextLine();
+			var card = board.getCards().get(1).get(cardIndex);
+			if (!board.selectCard(player, card)) {
+				System.out.println(
+						Color.RED.getValue() + "Vous ne pouvez pas acheter cette carte." + Color.RESET.getValue());
+				try {
 					Thread.sleep(2000);
-			        
+
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            }
-            return true;
-        }
-        return false;
-    }
+			}
+			return true;
+		}
+		return false;
+	}
 
-    public boolean play(int choice, Player player, Board board) {
-        Objects.requireNonNull(player);
-        Objects.requireNonNull(board);
-            return switch (choice) {
-                case 1 -> one(board, player);
-                case 2 -> two(board, player);
-                case 3 -> three(board, player);
-                default -> {
-                    System.out.println("Choix invalide.");
-                    yield false;
-                }
-            };
-    }
+	public boolean play(int choice, Player player, Board board) {
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(board);
+		return switch (choice) {
+		case 1 -> one(board, player);
+		case 2 -> two(board, player);
+		case 3 -> three(board, player);
+		default -> {
+			System.out.println("Choix invalide.");
+			yield false;
+		}
+		};
+	}
 }

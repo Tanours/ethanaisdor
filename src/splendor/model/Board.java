@@ -30,9 +30,30 @@ public class Board {
 		return Map.copyOf(tokens);
 	}
 
-	public boolean takeToken(Player player, Map<Stones, Integer> stones) {
-		return false;
-
+	public boolean takeOneToken(Player player, Stones stone) {
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(stone);
+		
+		tokens.put(stone, tokens.get(stone) - 1);
+	    player.addToken(stone, 1);
+	    
+		return true;
+	}
+	
+	public boolean takeMultipleSameTokens(Player player, Stones stone, int count) {
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(stone);
+		
+		if(count < 0) {
+			return false;
+		}
+		for(var i = 0; i < count; i++) {
+			tokens.put(stone, tokens.get(stone) - 1);
+		    player.addToken(stone, 1);
+		}
+		
+		return true;
+		
 	}
 
 	/*public List<Card> generateCardsList(int startIndex, int level, int numberCard) {
@@ -101,29 +122,13 @@ public class Board {
 	}
 
 	public boolean selectTokens(Player player, Stones stone, int count) {
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(stone);
+	    Objects.requireNonNull(player);
+	    Objects.requireNonNull(stone);
 
-		if (count <= 0 || count > 2) {
-			return false;
-		}
+	    if (count < 1 || count > 2) return false;
 
-		int available = tokens.getOrDefault(stone, 0);
-
-		if (count == 2) {
-			if (available < 4) {
-				return false;
-			}
-		} else {
-			if (available < 1) {
-				return false;
-			}
-		}
-
-		tokens.computeIfPresent(stone, (s, curr) -> curr = curr - count);
-		player.addToken(stone, count);
-		
-		return true;
+	    int available = tokens.getOrDefault(stone, 0);
+	    return (count == 1 && available >= 1) || (count == 2 && available >= 4);
 	}
 
 	public boolean selectCard(Player player, Card card) {
