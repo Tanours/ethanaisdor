@@ -109,6 +109,24 @@ public class Player {
 	    res.append(centre).append(boardHorizontalEnd).append(Stones.resetColor());
 	    return res.toString();
 	}
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Player player 
+				&& player.age == this.age 
+				&& player.points == this.points
+				&& player.name.equals(this.name) 
+				&& player.cards.equals(this.cards) 
+				&& player.wallet.equals(this.wallet);
+				
+	}
+	@Override
+	public int hashCode() {
+		return name.hashCode() 
+				^ Integer.hashCode(age) 
+				^ cards.hashCode() 
+				^ Integer.hashCode(points) 
+				^ wallet.hashCode();
+	}
 	
 	public String getName() {
 		return name;

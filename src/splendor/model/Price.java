@@ -74,4 +74,14 @@ public class Price {
 	    res.append("]");
 	    return res.toString();
 	}
+	@Override 
+	public boolean equals(Object o) {
+		return o instanceof Price price
+				&& price.map.equals(this.map);
+	}
+	
+	@Override
+	public int hashCode() {
+		return map.hashCode();
+	}
 }

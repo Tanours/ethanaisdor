@@ -64,7 +64,23 @@ public class Game {
 	    return players;
 	}
 
-
+	private void printTurn(Integer turn,Player currPlayer,List<Player> players) {
+		var res = new StringBuilder();
+		var startLine = "╔════════════════════════════════╗\n";
+		var endLine = "╚════════════════════════════════╝\n";
+		res.append(startLine);
+		res.append("║ Tour : %-23s ║\n".formatted(turn)).append("║ %-30s ║\n".formatted(""))		;
+		
+		for(var player : players) {
+			var selected_player = "\u001B[45m"+ "JOUEUR : %-15s".formatted(player.getName())+"\t"+Stones.resetColor();
+			res.append("║ %-30s ║\n".formatted(player.equals(currPlayer) ? 
+						selected_player
+					: "JOUEUR : %-15s".formatted(player.getName())
+					));
+		}
+		res.append(endLine);
+		System.out.println(res.toString());
+	}
 	private void playerTurn(Player player) {
 	    Objects.requireNonNull(player);
 	    int choice = -1;
@@ -99,11 +115,17 @@ public class Game {
 			for (int i = 0; i < 50; i++) { 
 	            System.out.println("\n");
 	        }
-			System.out.println(Stones.DIAMOND.getColor()+"═".repeat(147));
-			System.out.println("%67s".formatted(" TOUR : " + turn) );
-			System.out.println("═".repeat(147)+Stones.resetColor());
+			System.out.println("Plateau de jeu : \n");
 			board.revealCards();
+			try {
+				Thread.sleep(5000);
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			for (var player : players) {
+				printTurn(turn,player,players);
 				playerTurn(player);
 				if (victory(player)) {
 					System.out.println(

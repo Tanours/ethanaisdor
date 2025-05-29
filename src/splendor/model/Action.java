@@ -85,7 +85,7 @@ public class Action {
 			var card = board.getCards().get(1).get(cardIndex);
 			if (!board.selectCard(player, card)) {
 				System.out.println(
-						Color.RED.getValue() + "Vous ne pouvez pas acheter cette carte." + Color.RESET.getValue());
+					 "Vous ne pouvez pas acheter cette carte.");
 				try {
 					Thread.sleep(2000);
 
@@ -98,17 +98,18 @@ public class Action {
 		return false;
 	}
 
-	public boolean play(int choice, Player player, Board board) {
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(board);
-		return switch (choice) {
-		case 1 -> one(board, player);
-		case 2 -> two(board, player);
-		case 3 -> three(board, player);
-		default -> {
-			System.out.println("Choix invalide.");
-			yield false;
-		}
-		};
-	}
+
+    public boolean play(int choice, Player player, Board board) {
+        Objects.requireNonNull(player);
+        Objects.requireNonNull(board);
+            return switch (choice) {
+                case 1 -> one(board, player);
+                case 2 -> two(board, player);
+                case 3 -> three(board, player);
+                default -> {
+                    System.out.println("Choix invalide.");
+                     yield false;
+                }
+            };
+    }
 }
