@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
+
 public class Action {
 
 	private final Scanner scanner;
@@ -77,26 +78,26 @@ public class Action {
 	}
 
 	private boolean three(Board board, Player player) {
-		System.out.println("\nChoisissez une carte à acheter : ");
-		board.revealCards();
-		if (scanner.hasNextInt()) {
-			int cardIndex = scanner.nextInt() - 1;
-			scanner.nextLine();
-			var card = board.getCards().get(1).get(cardIndex);
-			if (!board.selectCard(player, card)) {
-				System.out.println(
-						Color.RED.getValue() + "Vous ne pouvez pas acheter cette carte." + Color.RESET.getValue());
-				try {
-					Thread.sleep(2000);
-
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			return true;
-		}
-		return false;
-	}
+        System.out.println("\nChoisissez une carte à acheter : ");
+        board.revealCards();
+        if (scanner.hasNextInt()) {
+            int cardIndex = scanner.nextInt() - 1;
+            scanner.nextLine();
+            var card = board.getCards().get(1).get(cardIndex);
+            if (!board.selectCard(player, card)) {
+                System.out.println("\t\tVous ne pouvez pas acheter cette carte.");
+                try {
+                    Thread.sleep(2000);
+                    
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
 	public boolean play(int choice, Player player, Board board) {
 		Objects.requireNonNull(player);
