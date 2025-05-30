@@ -9,19 +9,48 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Board {
 	private final HashMap<Integer, List<Card>> cards;
+	private final List<Noble> nobles;
 	private final HashMap<Stones, Integer> tokens;
 
 	public Board() {
 		this.cards = this.generateCards();
 		this.tokens = this.generateTokens();
+		this.nobles = this.initNobles();
 	}
 
+	private List<Noble> initNobles() {
+		var res = new ArrayList<Noble>();
+		
+		//res.add(new Noble(0, ))
+		
+		return res;
+	}
+	
+	public List<Noble> allNobleVisit(Player player) {
+		Objects.requireNonNull(player);
+		
+		var res = new ArrayList<Noble>();
+		
+		for(var noble : nobles) {
+			if(noble.canVisit(player)) {
+				res.add(noble);
+			}
+		}
+		
+		return res;
+	}
+	
+	public List<Noble> getNobles() {
+		return List.copyOf(nobles);
+	}
+	
 	public Map<Integer, List<Card>> getCards() {
 		return Map.copyOf(cards);
 	}

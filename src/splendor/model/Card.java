@@ -4,7 +4,7 @@ package splendor.model;
 import java.util.List;
 import java.util.Objects;
 
-public record Card(int id,Stones stone ,Price price,int prestige) {
+public record Card(int id, Stones stone , Price price, int prestige) {
 	public Card{
 		if(id<0||prestige<0) {
 			throw new IllegalArgumentException();

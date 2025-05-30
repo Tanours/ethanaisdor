@@ -12,13 +12,14 @@ public class Main {
         	
 			List<Player> players = Game.initPlayers(scanner);
 	        Game game = new Game(players);
-	        game.run();
+	        
     		
         	
             System.out.println("Bienvenue dans Splendor !");
             System.out.println("1. Phase 1 - Jeu simplifié");
             System.out.println("2. Phase 2 - Jeu complet");
             System.out.print("Votre choix : ");
+            game.run();
 
 //            int choix = scanner.nextInt();
 //            scanner.nextLine();

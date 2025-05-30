@@ -10,6 +10,7 @@ public class Player {
 	private final int age;
 	//public Map<Stones, Integer> tokens;
 	private final List<Card> cards;
+	private final List<Noble> nobles;
 	private int points;
 	private Price wallet;
 	
@@ -22,14 +23,16 @@ public class Player {
 		
 		this.name = name;
 		this.age = age;
-
+		
+		nobles = new ArrayList<>();
 		points = 0;
 		cards = new ArrayList<Card>();
 		wallet = new Price();
+		
 	}
 	
 	
-	public Player(String name, int age, int points,Price wallet, List<Card> cards) {
+	public Player(String name, int age, int points,Price wallet, List<Card> cards, List<Noble> nobles) {
 		Objects.requireNonNull(name, "name of player can't be null");
 		Objects.requireNonNull(wallet);
 		if(points < 0) {
@@ -41,6 +44,7 @@ public class Player {
 		this.points = points;
 		this.cards = cards;
 		this.wallet = wallet;
+		this.nobles = nobles;
 	}
 
 	
@@ -144,6 +148,10 @@ public class Player {
 		return wallet;
 	}
 
-
+	public List<Noble> getNobles() {
+		return nobles;
+	}
+	
+	
 	
 }

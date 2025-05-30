@@ -81,6 +81,7 @@ public class Game {
 		res.append(endLine);
 		System.out.println(res.toString());
 	}
+	
 	private void playerTurn(Player player) {
 	    Objects.requireNonNull(player);
 	    int choice = -1;
@@ -100,7 +101,65 @@ public class Game {
 	            scanner.nextLine();
 	            System.out.println("Veuillez entrer un nombre valide.");
 	        }
+	        
 	    }
+	    
+	    //affichage message "vous êtes visité par un noble"
+	    //si plusieurs nobles : 
+	    	//affichage des cartes de noble qui peuvent visité 
+	    //si 1 noble :
+	    	// le joueur acquiert le noble
+	}
+
+	private List<Noble> allNobleVisit(Player player) {
+	    return board.getNobles().stream()
+	        .filter(noble -> noble.canVisit(player) && !player.getNobles().contains(noble))
+	        .toList();
+	}
+
+	public boolean visitNobles(Player player) {
+		Objects.requireNonNull(player);
+		
+		var allNoble = this.allNobleVisit(player);
+		
+		System.out.println("Vous avez la visite de %s : ".formatted(allNoble.size() > 1 ? "plusieurs nobles" : "d'un noble"));
+		
+		if (allNoble.size() == 1) {
+		    var noble = allNoble.get(0);
+		    System.out.println("Vous êtes visité par un noble :");
+		    noble.displayNoble();
+		    player.getNobles().add(noble);
+		    System.out.println("Vous avez acquis un noble");
+		    return true;
+		} else {
+		    var chosen = this.selectNoble(allNoble);
+		    player.getNobles().add(chosen);
+		    System.out.println("Vous avez acquis un noble");
+		    return true;
+		}
+
+	}
+	
+	private Noble selectNoble(List<Noble> nobles) {
+	    System.out.println("Choisissez un noble à acquérir :");
+	    for (int i = 0; i < nobles.size(); i++) {
+	        System.out.println("[" + (i + 1) + "]");
+	        nobles.get(i).displayNoble();
+	    }
+
+	    int choice = -1;
+	    while (choice < 1 || choice > nobles.size()) {
+	        System.out.print("Entrez le numéro du noble : ");
+	        if (scanner.hasNextInt()) {
+	            choice = scanner.nextInt();
+	            scanner.nextLine();
+	        } else {
+	            scanner.nextLine();
+	            System.out.println("Entrée invalide");
+	        }
+	    }
+
+	    return nobles.get(choice - 1);
 	}
 
 
@@ -118,7 +177,7 @@ public class Game {
 			System.out.println("Plateau de jeu : \n");
 			board.revealCards();
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(2000);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
