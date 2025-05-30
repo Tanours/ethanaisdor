@@ -1,6 +1,6 @@
 package splendor.controller;
 
-public class Complet implements GamePhase {
+public record Complet() implements GamePhase {
 
 	@Override
 	public boolean nobles() {

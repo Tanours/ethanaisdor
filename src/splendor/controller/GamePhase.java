@@ -2,7 +2,7 @@ package splendor.controller;
 
 
 
-public interface GamePhase {
+public sealed interface GamePhase permits Base, Complet{
 	boolean nobles();
 	boolean reseravtion();
 	

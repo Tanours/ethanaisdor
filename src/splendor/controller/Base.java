@@ -2,7 +2,7 @@
 package splendor.controller;
 
 
-public class Base implements GamePhase {
+public record Base() implements GamePhase {
 
 	@Override
 	public boolean nobles() {

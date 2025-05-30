@@ -14,6 +14,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import splendor.controller.Base;
+import splendor.controller.Complet;
+import splendor.controller.GamePhase;
+
 public class Board {
 	private final HashMap<Integer, List<Card>> cards;
 	private final List<Noble> nobles;
@@ -142,12 +146,23 @@ public class Board {
 		return res;
 	}
 
-	public void revealCards() {
-		var reveal = cards.get(1).stream().limit(4).toList();
-		System.out.println(Card.displayCards(reveal));
-//		for (int i = 0; i < 4; i++) {
-//			System.out.print(i + 1 + " :\n\n " + cards.get(1).get(i));
-//		}
+	public void revealCards(GamePhase phase) {
+		List<Card> reveal;
+		
+		switch(phase) {
+		case Base b -> {
+				reveal = cards.get(1).stream().limit(4).toList();
+				System.out.println(Card.displayCards(reveal));
+			}
+		case Complet c -> {
+			for(var level: cards.entrySet()) {
+				reveal = cards.get(level.getKey()).stream().limit(4).toList();
+				System.out.println(Card.displayCards(reveal));
+			}
+		}
+			
+		default -> throw new IllegalArgumentException("Unexpected value: " + phase);
+		}
 	}
 
 	public boolean selectTokens(Player player, Stones stone, int count) {
