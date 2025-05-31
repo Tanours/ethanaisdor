@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
+import splendor.controller.Complet;
 import splendor.view.PrintGame;
 
 public class Game {
@@ -101,14 +103,8 @@ public class Game {
 	            scanner.nextLine();
 	            System.out.println("Veuillez entrer un nombre valide.");
 	        }
-	        
 	    }
-	    
-	    //affichage message "vous êtes visité par un noble"
-	    //si plusieurs nobles : 
-	    	//affichage des cartes de noble qui peuvent visité 
-	    //si 1 noble :
-	    	// le joueur acquiert le noble
+	    visitNobles(player);
 	}
 
 	private List<Noble> allNobleVisit(Player player) {
@@ -129,13 +125,17 @@ public class Game {
 		    System.out.println("Vous êtes visité par un noble :");
 		    noble.displayNoble();
 		    player.getNobles().add(noble);
+		    player.addPrestige(noble.prestige());
+		    System.out.println("Vous avez acquis un noble");
+		    return true;
+		} else if(allNoble.size() > 1) {
+		    var chosen = this.selectNoble(allNoble);
+		    player.getNobles().add(chosen);
+		    player.addPrestige(chosen.prestige());
 		    System.out.println("Vous avez acquis un noble");
 		    return true;
 		} else {
-		    var chosen = this.selectNoble(allNoble);
-		    player.getNobles().add(chosen);
-		    System.out.println("Vous avez acquis un noble");
-		    return true;
+			return false;
 		}
 
 	}
@@ -175,7 +175,7 @@ public class Game {
 	            System.out.println("\n");
 	        }
 			System.out.println("Plateau de jeu : \n");
-			board.revealCards();
+			board.revealCards(new Complet());
 			try {
 				Thread.sleep(2000);
 				

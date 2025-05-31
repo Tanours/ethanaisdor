@@ -2,7 +2,9 @@ package splendor.model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,20 +21,24 @@ import splendor.controller.Complet;
 import splendor.controller.GamePhase;
 
 public class Board {
-	private final HashMap<Integer, List<Card>> cards;
+	private final Map<Integer, List<Card>> cards;
 	private final List<Noble> nobles;
 	private final HashMap<Stones, Integer> tokens;
 
 	public Board() {
-		this.cards = this.generateCards();
+		this.cards = this.initCard();
 		this.tokens = this.generateTokens();
 		this.nobles = this.initNobles();
 	}
 
 	private List<Noble> initNobles() {
-		var res = new ArrayList<Noble>();
+		var res = Parser.getNobles(Path.of("nobles.csv"), StandardCharsets.UTF_8);
 		
-		//res.add(new Noble(0, ))
+		return res;
+	}
+	
+	private Map<Integer, List<Card>> initCard() {
+		var res = Parser.getDeveloppementCard(Path.of("card.csv"), StandardCharsets.UTF_8);
 		
 		return res;
 	}

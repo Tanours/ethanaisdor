@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
+import splendor.controller.Complet;
+
 
 public class Action {
 
@@ -79,16 +81,16 @@ public class Action {
 
 	private boolean three(Board board, Player player) {
 		System.out.println("\nChoisissez une carte à acheter : ");
-		board.revealCards();
+		board.revealCards(new Complet());
 		if (scanner.hasNextInt()) {
 			int cardIndex = scanner.nextInt() - 1;
 			scanner.nextLine();
 			var card = board.getCards().get(1).get(cardIndex);
 			if (!board.selectCard(player, card)) {
-				System.out.println(
-					 "Vous ne pouvez pas acheter cette carte.");
+				System.out.println("Vous ne pouvez pas acheter cette carte.");
 				try {
 					Thread.sleep(2000);
+					return false;
 
 				} catch (InterruptedException e) {
 					e.printStackTrace();

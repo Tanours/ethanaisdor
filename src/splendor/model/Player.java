@@ -81,7 +81,7 @@ public class Player {
 		}
 	    
 	    cards.add(card);
-	    points+=card.prestige();
+	    this.addPrestige(card.prestige());
 	    
 	}
 	
@@ -152,6 +152,9 @@ public class Player {
 		return nobles;
 	}
 	
+	public void addPrestige(int points) {
+	    this.points += points;
+	}
 	
 	
 }
