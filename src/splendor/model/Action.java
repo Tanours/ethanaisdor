@@ -80,31 +80,39 @@ public class Action {
 	}
 
 	private boolean three(Board board, Player player) {
-		System.out.println("\nChoisissez une carte à acheter : ");
+		Objects.requireNonNull(board);
+		Objects.requireNonNull(player);
+		
+		System.out.println("\nChoisissez une carte à acheter. Changer d'option : q " );
 		board.revealCards(new Complet());
-		if (scanner.hasNextInt()) {
-			int cardIndex = scanner.nextInt() - 1;
+		try {
+			var input = scanner.next().toUpperCase();
+
+			if (input.equals("Q")) {
+				return false; 
+			}
+			int cardIndex = Integer.parseInt(input);
 			scanner.nextLine();
 			var card = board.getCards().get(1).get(cardIndex);
 			if (!board.selectCard(player, card)) {
 				System.out.println("Vous ne pouvez pas acheter cette carte.");
-				try {
-					Thread.sleep(2000);
-					return false;
-
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Thread.sleep(2000);
+				return false;
 			}
 			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
 		}
-		return false;
+		catch (InterruptedException e) {
+			return false;
+		}
 	}
 
 
     public boolean play(int choice, Player player, Board board) {
         Objects.requireNonNull(player);
         Objects.requireNonNull(board);
+        
             return switch (choice) {
                 case 1 -> one(board, player);
                 case 2 -> two(board, player);
