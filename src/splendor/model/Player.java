@@ -10,6 +10,7 @@ public class Player {
 	private final int age;
 	//public Map<Stones, Integer> tokens;
 	private final List<Card> cards;
+	private final List<Card> reservedCards;
 	private final List<Noble> nobles;
 	private int points;
 	private Price wallet;
@@ -26,13 +27,14 @@ public class Player {
 		
 		nobles = new ArrayList<>();
 		points = 0;
-		cards = new ArrayList<Card>();
+		cards = new ArrayList<>();
+		reservedCards = new ArrayList<>();
 		wallet = new Price();
 		
 	}
 	
 	
-	public Player(String name, int age, int points,Price wallet, List<Card> cards, List<Noble> nobles) {
+	public Player(String name, int age, int points,Price wallet, List<Card> cards,List<Card> reservedCard, List<Noble> nobles) {
 		Objects.requireNonNull(name, "name of player can't be null");
 		Objects.requireNonNull(wallet);
 		if(points < 0) {
@@ -45,10 +47,11 @@ public class Player {
 		this.cards = cards;
 		this.wallet = wallet;
 		this.nobles = nobles;
+		this.reservedCards = reservedCard;
 	}
 
 	
-	public void addToken(Stones stone, int quantity) {
+	public boolean addToken(Stones stone, int quantity) {
 	    Objects.requireNonNull(stone);
 
 	    int ruby = wallet.getValue(Stones.RUBY);
@@ -64,6 +67,7 @@ public class Player {
 	        emerald + (stone.equals(Stones.EMERALD) ? quantity : 0),
 	        onyx + (stone.equals(Stones.ONYX) ? quantity : 0)
 	    );
+	    return true;
 	}
 
 	
@@ -113,6 +117,10 @@ public class Player {
 	    res.append(centre).append(boardHorizontalEnd).append(Stones.resetColor());
 	    return res.toString();
 	}
+	public boolean addReserved(Card card) {
+		
+		return (reservedCards.size() >= 3) ? false : reservedCards.add(card) && addToken(Stones.GOLDJOKER, 1);
+	}
 	@Override
 	public boolean equals(Object o) {
 		return o instanceof Player player 
@@ -151,10 +159,14 @@ public class Player {
 	public List<Noble> getNobles() {
 		return nobles;
 	}
-	
+	public List<Card> getReserved(){
+		return this.reservedCards;
+	}
 	public void addPrestige(int points) {
 	    this.points += points;
 	}
+	
+	
 	
 	
 }

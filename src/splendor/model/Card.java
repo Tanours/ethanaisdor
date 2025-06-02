@@ -3,6 +3,7 @@ package splendor.model;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public record Card(int id, Stones stone , Price price, int prestige) {
 	public Card{
@@ -18,22 +19,31 @@ public record Card(int id, Stones stone , Price price, int prestige) {
 //	public String toString() {
 //		return "[" + stone + ", " + prestige + ", " + price + "]\n";
 //	}
+	private static String getNbToken(int nb) {
+		var build = new StringJoiner(" ");
+		for(var i = 0; i<nb;i++) build.add("●");
+		return build.toString();
+	}
 	private static String getCardElement(String value, List<Card> cards) {
 		var res = new StringBuilder();
 		res.append("\n");
 		
 		if(value.equals("header")) {
+			var firstCardId = cards.get(0).id();
+			var cardGap = firstCardId >= 70 ? 8 : firstCardId >= 40 ? 4 : 0;
 			for(var i = 1;i<= cards.size();i++) {
 				var card = cards.get(i-1);
-				var stoneElement = "║ %-8s PRESTIGE +%-2s   %8s ║".formatted(i,card.prestige(),card.stone());
+				var stoneElement = "║ %-8s PRESTIGE +%-2s   %8s ║".formatted(cardGap+i,card.prestige(),card.stone());
 				res.append(stoneElement).append(" ");
 			}
 		}
 		else {
 			for(int i = 0; i<5;i++) {
-				var stone = Stones.values()[i].toString();
+				var stone = Stones.values()[i];
 				for(var card : cards) {
-					var stoneElement = "║ %-8s : %-21s ║".formatted(stone,card.price.getValue(Stones.valueOf(stone)));
+					var price = card.price.getValue(stone);
+					var build = getNbToken(price);
+					var stoneElement = "║ %-8s : %s%-21s%s ║".formatted(stone,stone.getColor(),build.toString(),Stones.resetColor());
 					res.append(stoneElement).append(" ");
 				}
 				res.append("\n");

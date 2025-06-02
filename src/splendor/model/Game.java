@@ -7,20 +7,25 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import splendor.controller.Complet;
+import splendor.controller.GamePhase;
 import splendor.view.PrintGame;
 
 public class Game {
-	private final Board board = new Board();
+	private final Board board;
 	private final List<Player> players;
 	private final PrintGame printGame;
 	private final Scanner scanner = new Scanner(System.in);
 	private final Action action;
+	private final GamePhase phase;
 
 
-	public Game(List<Player> players) {
+	public Game(GamePhase phase,List<Player> players) {
+		this.phase = phase;
+		board = new Board(phase);
 	    this.players = List.copyOf(players);
-	    this.printGame = new PrintGame(board, players);
-	    this.action = new Action(scanner); 
+	    printGame = new PrintGame(board, players);
+	    action = new Action(scanner,phase); 
+	    
 	}
 	
 	public static List<Player> initPlayers(Scanner scanner) {
@@ -86,21 +91,24 @@ public class Game {
 	
 	private void playerTurn(Player player) {
 	    Objects.requireNonNull(player);
-	    int choice = -1;
+	    var choice = -1;
 
-	    boolean validAction = false;
+	    var validAction = false;
 	    
 	    while (!validAction) {
 	        System.out.println(player);
-	        printGame.printChoice();
+	        printGame.printChoice(phase);
 	        System.out.println("\nChoisissez une option : ");
 
 	        if (scanner.hasNextInt()) {
 	            choice = scanner.nextInt();
 	            scanner.nextLine();
+	            if(choice < 1 || choice > phase.getMaxChoice()) {
+	            	System.out.println("Veuillez entrer un nombre valide.");
+	            	continue;
+	            }
 	            validAction = action.play(choice, player, board);
 	        } else {
-	            scanner.nextLine();
 	            System.out.println("Veuillez entrer un nombre valide.");
 	        }
 	    }
@@ -175,7 +183,7 @@ public class Game {
 	            System.out.println("\n");
 	        }
 			System.out.println("Plateau de jeu : \n");
-			board.revealCards(new Complet());
+			board.revealCards();
 			try {
 				Thread.sleep(2000);
 				

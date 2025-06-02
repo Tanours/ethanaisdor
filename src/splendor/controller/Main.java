@@ -28,7 +28,7 @@ public class Main {
 //        	}
         	
 			List<Player> players = Game.initPlayers(scanner);
-	        Game game = new Game(players);
+	        
 	        
     		
         	
@@ -36,23 +36,22 @@ public class Main {
             System.out.println("1. Phase 1 - Jeu simplifié");
             System.out.println("2. Phase 2 - Jeu complet");
             System.out.print("Votre choix : ");
+
+            int choix = scanner.nextInt();
+            scanner.nextLine();
+
+            var gamePhase = switch (choix) {
+                case 1 -> new Base();
+                case 2 -> new Complet();
+                default -> {
+                    System.out.println("Choix invalide");
+                    yield null;
+                }
+            };
+            Game game = new Game(gamePhase,players);
             game.run();
 
-//            int choix = scanner.nextInt();
-//            scanner.nextLine();
-//
-//            var gamePhase = switch (choix) {
-//                case 1 -> new Base();
-//                case 2 -> new Complet();
-//                default -> {
-//                    System.out.println("Choix invalide");
-//                    yield null;
-//                }
-//            };
-//
-//            if (gamePhase != null) {
-//                gamePhase.run(scanner);
-//            }
+          
         }
     }
 }
