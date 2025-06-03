@@ -10,8 +10,9 @@ import splendor.action.*;
 
 public class MainTest {
 	public static void main(String[] args) {
-		var info = new GetPlayerInfo();
-		var players = info.run();
+		var phase = new GetPhase();
+		phase.run();
+		
 		
 	}
 }

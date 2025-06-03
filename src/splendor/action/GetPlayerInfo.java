@@ -6,13 +6,14 @@ import java.util.List;
 
 import splendor.model.Player;
 import splendor.model.Stones;
+import splendor.view.DisplayPrompt;
 
 public record GetPlayerInfo() implements Action<List<Player>> {
 	
-	private int getNbPlayer(String arrow) {
+	private int getNbPlayer() {
 		int nbJoueur = -1;
 		while(nbJoueur < 0) {
-			System.out.println(arrow+" Entrez le nombre de joueur (2-4) :");
+			System.out.println(new DisplayPrompt(" Entrez le nombre de joueur (2-4) :"));
 			if(sc.hasNextInt()) {
 				nbJoueur = sc.nextInt();
 				if(nbJoueur < 2  || nbJoueur > 4) {
@@ -30,15 +31,15 @@ public record GetPlayerInfo() implements Action<List<Player>> {
 		return nbJoueur;
 	}
 	
-	private String getPlayerName(String arrow) {
-		System.out.println(arrow+" Nom :");
+	private String getPlayerName() {
+		System.out.println(new DisplayPrompt("Nom :"));
 		var joueurName = sc.next();
 		return joueurName;
 	}
-	private int getPlayerAge(String arrow) {
+	private int getPlayerAge() {
 		var joueurAge = -1;
 		while(joueurAge < 0) {
-			System.out.println(arrow+" Age :");
+			System.out.println(new DisplayPrompt("Age :"));
 			
 			sc.nextLine();
 			if(sc.hasNextInt()) {
@@ -55,17 +56,16 @@ public record GetPlayerInfo() implements Action<List<Player>> {
 	public List<Player> run(){
 		var res = new ArrayList<Player>();
 		try {
-			var arrow = "%s%1s%s".formatted(Stones.DIAMOND.getColor(),"▶",Stones.resetColor());
 			System.out.println("╔═════════════════════════════════════════════╗");
 			System.out.println("║          Informations des joueurs           ║");
 			System.out.println("╚═════════════════════════════════════════════╝");
-			int nbPlayer = getNbPlayer(arrow);
+			int nbPlayer = getNbPlayer();
 			for(var i = 0;i<nbPlayer;i++) {
 				System.out.println("-".repeat(12));
 				System.out.println("👤 Joueur %d".formatted(i+1));
 				System.out.println("-".repeat(12));
-				var name = getPlayerName(arrow);
-				var age = getPlayerAge(arrow);
+				var name = getPlayerName();
+				var age = getPlayerAge();
 				res.add(new Player(name,age));
 			}
 			return res;
