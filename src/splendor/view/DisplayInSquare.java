@@ -1,17 +1,47 @@
 package splendor.view;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
-public record DisplayInSquare(String text,int gap) {
+public record DisplayInSquare(int gap,String... args) {
 	public DisplayInSquare{
-		Objects.requireNonNull(text);
+		Objects.requireNonNull(args);
+		if(gap < 0) throw new IllegalArgumentException();
 	}
+	
+	private int getMaxSize() {
+		var max = 0;
+		for(var arg : args) {
+			var length = getRealSize(arg);
+			if(length > max) max = length;
+		}
+		return max;
+	}
+	
+	private int getRealSize(String arg) {
+		var pattern = Pattern.compile("\u001B\\[[0-9;]*m");
+		var res = arg.length();
+		if(pattern.matcher(arg).replaceAll("").length() != arg.length()){
+			res = pattern.matcher(arg).replaceAll("").length() ;
+		}
+		return res;
+		 
+	}
+	
 	@Override
 	public String toString() {
+		
+		
 		var build = new StringBuilder();
-		build.append("╔").append("═".repeat(2*gap+text.length())).append("╗").append("\n");
-		build.append("║").append(" ".repeat(gap)).append(text).append(" ".repeat(gap)).append("║").append("\n");
-		build.append("╚").append("═".repeat(2*gap+text.length())).append("╝");
+		var maxSize = getMaxSize();
+		
+		
+		build.append("╔").append("═".repeat(2*gap+maxSize)).append("╗").append("\n");
+		for(var arg : args) {
+			
+			build.append("║").append(" ".repeat(gap)).append(arg).append(" ".repeat(maxSize-getRealSize(arg)+gap)).append("║").append("\n");
+		}
+		build.append("╚").append("═".repeat(2*gap+maxSize)).append("╝");
 		return build.toString();
 	}
 }

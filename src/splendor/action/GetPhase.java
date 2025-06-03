@@ -10,7 +10,7 @@ public record GetPhase() implements Action<GamePhase> {
 	
 	public GamePhase run() {
 		
-		System.out.println(new DisplayInSquare("Difficulté",20));
+		System.out.println(new DisplayInSquare(20,"Difficulté","Test"));
 		System.out.println(new DisplayPrompt("Choisissez une difficulté :"));
 		return null;
 	}
