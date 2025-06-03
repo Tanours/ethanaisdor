@@ -18,9 +18,9 @@ public enum Stones {
 	}
 	public String getColor() {
 		return switch (this) {
-			case SAPHIR -> "\u001B[94m";
+			case SAPHIR -> "%s".formatted("\u001B[94m");
 			case EMERALD -> "\u001B[92m";
-			case RUBY -> "\u001B[91m";
+			case RUBY -> "%s".formatted("\u001B[91m");
 			case DIAMOND -> "\u001B[36m";
 			default -> "\u001B[90m";
 		};

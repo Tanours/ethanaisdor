@@ -1,15 +1,17 @@
 package splendor.controller;
 
+
+
 import java.io.IOException;
 
 import splendor.model.Board;
 import splendor.model.Card;
+import splendor.action.*;
 
 public class MainTest {
 	public static void main(String[] args) {
-		var board = new Board();
-		var cards = board.getCards();
-		System.out.println(Card.displayCards(cards.get(1)));
+		var info = new GetPlayerInfo();
+		var players = info.run();
 		
 	}
 }

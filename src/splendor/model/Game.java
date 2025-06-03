@@ -126,6 +126,8 @@ public class Game {
 		
 		var allNoble = this.allNobleVisit(player);
 		
+		if(allNoble.isEmpty()) return false;
+		
 		System.out.println("Vous avez la visite de %s : ".formatted(allNoble.size() > 1 ? "plusieurs nobles" : "d'un noble"));
 		
 		if (allNoble.size() == 1) {
