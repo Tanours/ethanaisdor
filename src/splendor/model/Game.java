@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import splendor.action.BuyCard;
+import splendor.action.Action;
+import splendor.action.ResCard;
+import splendor.action.Take2SameToken;
+import splendor.action.Take3DiffToken;
 import splendor.controller.Complet;
 import splendor.controller.GamePhase;
 import splendor.view.PrintGame;
@@ -15,7 +20,7 @@ public class Game {
 	private final List<Player> players;
 	private final PrintGame printGame;
 	private final Scanner scanner = new Scanner(System.in);
-	private final Action action;
+	//private final Action action;
 	private final GamePhase phase;
 
 
@@ -24,7 +29,7 @@ public class Game {
 		board = new Board(phase);
 	    this.players = List.copyOf(players);
 	    printGame = new PrintGame(board, players);
-	    action = new Action(scanner,phase); 
+	    //action = new Action(); 
 	    
 	}
 	
@@ -89,13 +94,24 @@ public class Game {
 		System.out.println(res.toString());
 	}
 	
+	private Action<?> getActionFromChoice(int choice, Player player) {
+	    return switch (choice) {
+	        case 1 -> new Take3DiffToken(board, player);
+	        case 2 -> new Take2SameToken(board);
+	        case 3 -> new BuyCard(board);
+	        case 4 -> new ResCard(board);
+	        default -> throw new IllegalArgumentException("Choix invalide : " + choice);
+	    };
+	}
+
+
+	
 	private void playerTurn(Player player) {
 	    Objects.requireNonNull(player);
-	    var choice = -1;
+	    int choice = -1;
+	    boolean actionDone = false;
 
-	    var validAction = false;
-	    
-	    while (!validAction) {
+	    while (!actionDone) {
 	        System.out.println(player);
 	        printGame.printChoice(phase);
 	        System.out.println("\nChoisissez une option : ");
@@ -103,17 +119,25 @@ public class Game {
 	        if (scanner.hasNextInt()) {
 	            choice = scanner.nextInt();
 	            scanner.nextLine();
-	            if(choice < 1 || choice > phase.getMaxChoice()) {
-	            	System.out.println("Veuillez entrer un nombre valide.");
-	            	continue;
+
+	            if (choice < 1 || choice > phase.getMaxChoice()) {
+	                System.out.println("Veuillez entrer un nombre valide.");
+	                continue;
 	            }
-	            validAction = action.play(choice, player, board);
+
+	            Action<?> action = getActionFromChoice(choice, player);
+	            var result = action.run();
+	
+
 	        } else {
+	            scanner.nextLine();
 	            System.out.println("Veuillez entrer un nombre valide.");
 	        }
 	    }
+
 	    visitNobles(player);
 	}
+
 
 	private List<Noble> allNobleVisit(Player player) {
 	    return board.getNobles().stream()
