@@ -2,6 +2,7 @@ package splendor.controller;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,9 @@ public record Complet() implements GamePhase {
 	
 	public Map<Integer, List<Card>> initCards() {
 		var res = Parser.getDeveloppementCard(Path.of("card.csv"), StandardCharsets.UTF_8);
+		for (var entry : res.entrySet()) {
+	        Collections.shuffle(entry.getValue());
+	    }
 		return res;
 	}
 	public List<Noble> initNobles() {

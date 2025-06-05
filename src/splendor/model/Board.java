@@ -61,7 +61,7 @@ public class Board {
 		return Map.copyOf(tokens);
 	}
 
-	public boolean takeOneToken(Player player, Stones stone) {
+	public boolean takeToken(Player player, Stones stone) {
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(stone);
 		
@@ -83,8 +83,7 @@ public class Board {
 		    player.addToken(stone, 1);
 		}
 		
-		return true;
-		
+		return true;	
 	}
 
 
@@ -114,7 +113,7 @@ public class Board {
 	    int available = tokens.getOrDefault(stone, 0);
 	    return (count == 1 && available >= 1) || (count == 2 && available >= 4);
 	}
-	public boolean reserveCard(Player player,Card card) {
+	public boolean reserveCard(Player player, Card card) {
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(card);
 		for (var cardList : cards.values()) {

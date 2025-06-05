@@ -97,8 +97,8 @@ public class Game {
 	private Action<?> getActionFromChoice(int choice, Player player) {
 	    return switch (choice) {
 	        case 1 -> new Take3DiffToken(board, player);
-	        case 2 -> new Take2SameToken(board);
-	        case 3 -> new BuyCard(board);
+	        case 2 -> new Take2SameToken(board, player);
+	        case 3 -> new BuyCard(board, player);
 	        case 4 -> new ResCard(board,player);
 	        default -> throw new IllegalArgumentException("Choix invalide : " + choice);
 	    };
@@ -125,7 +125,7 @@ public class Game {
 	                continue;
 	            }
 
-	            Action<?> action = getActionFromChoice(choice, player);
+	            var action = getActionFromChoice(choice, player);
 	            var result = action.run();
 	            if(result.equals(true)) {
 	            	actionDone = true;

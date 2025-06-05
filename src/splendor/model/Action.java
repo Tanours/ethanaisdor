@@ -53,7 +53,7 @@ public class Action {
 
 
 	    for (var s : pickedColors) {
-	        board.takeOneToken(player, s);
+	        //board.takeOneToken(player, s);
 	    }
 	    return true;
 	}
@@ -128,19 +128,19 @@ public class Action {
 				if(input.trim().matches("\\d+")) {
 					var cardChoice = Integer.parseInt(input);
 					if(cardChoice >= 1 && cardChoice < gamePhase.getMaxCard()) {
-						var card = selectCardByNumber(cardChoice, board);
-						if(!board.reserveCard(player,card)) {
-							System.out.println("Vous ne pouvez plus reservez de carte sans en avoir acheter une des vôtre au préalable");
-							try {
-								Thread.sleep(2000);
-								
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-						}
-						else valid = true;
+//						var card = selectCardByNumber(cardChoice, board);
+//						if(!board.reserveCard(player,card)) {
+//							System.out.println("Vous ne pouvez plus reservez de carte sans en avoir acheter une des vôtre au préalable");
+//							try {
+//								Thread.sleep(2000);
+//								
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//							
+//						}
+//						else valid = true;
 						
 					}
 				}

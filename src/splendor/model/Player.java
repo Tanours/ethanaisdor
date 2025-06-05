@@ -2,13 +2,14 @@ package splendor.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Player {
 	
 	private final String name;
 	private final int age;
-	//public Map<Stones, Integer> tokens;
+	public Map<Stones, Integer> tokens;
 	private final List<Card> cards;
 	private final List<Card> reservedCards;
 	private final List<Noble> nobles;
@@ -165,6 +166,12 @@ public class Player {
 	}
 	public void addPrestige(int points) {
 	    this.points += points;
+	}
+
+
+	public Map<Stones, Integer> getTokens() {
+		
+		return Map.copyOf(tokens);
 	}
 	
 	

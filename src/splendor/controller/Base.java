@@ -2,6 +2,7 @@
 package splendor.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +40,14 @@ public record Base() implements GamePhase {
 		return false;
 	}
 	
-	public Map<Integer,List<Card>> initCards(){
-		var hash = new HashMap<Integer, List<Card>>();
-		hash.putIfAbsent(1, generateCardsListWithCost(1, 1, 8, 1));
-		return hash;
+	public Map<Integer, List<Card>> initCards() {
+	    var hash = new HashMap<Integer, List<Card>>();
+	    var level1Cards = generateCardsListWithCost(1, 1, 8, 1);
+	    //Collections.shuffle(level1Cards); 
+	    hash.put(1, level1Cards);
+	    return hash;
 	}
+
 	public List<Noble> initNobles(){
 		return List.of();
 	}
