@@ -129,9 +129,11 @@ public class Board {
 		Objects.requireNonNull(card);
 
 		if (!player.canBuy(card)) {
-
+			System.out.println(card.price());
 			return false;
 		}
+		
+		player.buyCard(card);
 
 		for (var cardList : cards.values()) {
 			if (cardList.remove(card)) {
@@ -139,7 +141,7 @@ public class Board {
 			}
 		}
 		
-		player.buyCard(card);
+		
 
 		return true;
 	}
