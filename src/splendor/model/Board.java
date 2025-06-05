@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import splendor.controller.Base;
 import splendor.controller.Complet;
 import splendor.controller.GamePhase;
+import splendor.view.DisplayCards;
 
 public class Board {
 	private final Map<Integer, List<Card>> cards;
@@ -101,16 +102,7 @@ public class Board {
 	}
 
 	public void revealCards() {
-		if(cards.keySet().size() > 1) {
-			for(var level: cards.entrySet()) {
-				var reveal = cards.get(level.getKey()).stream().limit(4).toList();
-				System.out.println(Card.displayCards(reveal));
-			}
-		}
-		else {
-			var reveal = cards.get(1).stream().limit(4).toList();
-			System.out.println(Card.displayCards(reveal));
-		}
+		System.out.println(new DisplayCards(cards));
 	}
 
 	public boolean selectTokens(Player player, Stones stone, int count) {
@@ -152,109 +144,5 @@ public class Board {
 
 		return true;
 	}
-
-//	public HashMap<Integer, List<Card>> CardReferenceReader(String filePath) throws IOException {
-//		Objects.requireNonNull(filePath);
-//		var res = new HashMap<Integer, List<Card>>();
-//		var file = Paths.get(filePath);
-//		var listString = new ArrayList<List<String>>();
-//		var level = "";
-//		var gem = "";
-//		try (var reader = Files.newInputStream(file)) {
-//			var matcher = lineReferenceReader(reader);
-//			
-//			while (matcher.find()) {
-//				var cellMatcher = cellReferenceReader(matcher);
-//				var row = new ArrayList<String>();
-//				var columnIndex = 0;
-//				while (cellMatcher.find()) {
-//				var cellValue = cellMatcher.group(1).trim().replaceAll("<[^>]*>", "");
-//				switch (columnIndex) {
-//				case 2, 5, 6, 7, 8, 9:
-//					row.add(cellValue.isEmpty() ? "0" : cellValue);
-//					break;
-//				case 1:
-//					gem = !cellValue.isEmpty() ? cellValue : gem;
-//					row.add(gem);
-//					break;
-//				case 0:
-//					level = (!cellValue.isEmpty() && cellValue.matches("\\d+")) ? cellValue : level;
-//					row.add(level);
-//					break;
-//				default:
-//					break;
-//				}
-//					columnIndex++;
-//				}
-//				row = new ArrayList<>(row.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList()));
-//				if (!row.isEmpty()) {
-//					listString.add(row);
-//				}
-//
-//			}
-//			listString = new ArrayList<>(listString.stream().skip(3).collect(Collectors.toList()));
-//			var index = 1;
-//			for (var element : listString) {
-//				System.out.println(element);
-//				res.merge(Integer.parseInt(element.get(0)),
-//						new ArrayList<Card>(List.of(this.listToCard(index, element))), (curr, newlist) -> {
-//							curr.addAll(newlist);
-//							return curr;
-//						});
-//				index++;
-//			}
-//		} catch (IOException e) {
-//			System.out.println( "Error : cannot read file");
-//		}
-//		return res;
-//	}
-//	private Matcher lineReferenceReader(InputStream reader) throws IOException{
-//		var byt = reader.readAllBytes();
-//		var html = new String(byt);
-//		var rowPattern = Pattern.compile("<tr.*?>(.*?)</tr>");
-//		var matcher = rowPattern.matcher(html);
-//		return matcher;
-//	}
-//	
-//	private Matcher cellReferenceReader(Matcher matcher) {
-//		var content = matcher.group(1);
-//		var cellPattern = Pattern.compile("<td.*?>(.*?)</td>");
-//		var cellMatcher = cellPattern.matcher(content);
-//		return cellMatcher;
-//	}
-//	
-//	public Card listToCard(int id, List<String> list) {
-//		Objects.requireNonNull(list);
-//		if (id < 0) {
-//			throw new IllegalArgumentException();
-//		}
-//		Stones gem;
-//		var hash = new HashMap<Stones, Integer>();
-//		switch (list.get(1)) {
-//		case "black":
-//			gem = Stones.ONYX;
-//			break;
-//		case "blue":
-//			gem = Stones.SAPHIR;
-//			break;
-//		case "white":
-//			gem = Stones.DIAMOND;
-//			break;
-//		case "green":
-//			gem = Stones.EMERALD;
-//			break;
-//		default:
-//			gem = Stones.RUBY;
-//		}
-//		var ruby = Integer.parseInt(list.get(6));
-//		var saphir = Integer.parseInt(list.get(4));
-//		var diamond = Integer.parseInt(list.get(3));
-//		var emerald = Integer.parseInt(list.get(5));
-//		var onyx = Integer.parseInt(list.get(7));
-//		
-//		var price = new Price(ruby,saphir,diamond,emerald,onyx);
-//
-//		return new Card(id, gem, price, Integer.parseInt(list.get(2)),false);
-//	}
 
 }

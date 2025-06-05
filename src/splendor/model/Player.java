@@ -103,8 +103,9 @@ public class Player {
 	    res.append(centre).append("╠ Points : %-39s ║\n".formatted(points));
 	    
 	    res.append(centre).append("╠ Tokens : %-39s ║\n".formatted(wallet));
-	    
-	    
+	    if(reservedCards.size() > 0) {
+	    	res.append(centre).append("╠ ReservedCards : %-32s ║\n".formatted(reservedCards.size()));
+	    }
 	    res.append(centre).append("╠ Bonus : %-40s ║\n".formatted(""));
 	    if (!cards.isEmpty()) {
 	    	var buffer = "";

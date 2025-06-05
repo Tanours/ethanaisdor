@@ -99,7 +99,7 @@ public class Game {
 	        case 1 -> new Take3DiffToken(board, player);
 	        case 2 -> new Take2SameToken(board);
 	        case 3 -> new BuyCard(board);
-	        case 4 -> new ResCard(board);
+	        case 4 -> new ResCard(board,player);
 	        default -> throw new IllegalArgumentException("Choix invalide : " + choice);
 	    };
 	}
@@ -127,6 +127,9 @@ public class Game {
 
 	            Action<?> action = getActionFromChoice(choice, player);
 	            var result = action.run();
+	            if(result.equals(true)) {
+	            	actionDone = true;
+	            }
 	
 
 	        } else {

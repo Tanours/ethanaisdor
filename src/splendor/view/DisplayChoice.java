@@ -19,8 +19,6 @@ public record DisplayChoice(String... args) {
 			
 			var number = "%s%1s%s".formatted(Stones.EMERALD.getColor(),i+1,Stones.resetColor());
 			var text = number+" - "+args[i];
-			System.out.println(text);
-			System.out.println(text.length());
 			list.add(text);
 			
 			

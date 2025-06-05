@@ -22,23 +22,7 @@ public class Action {
 		this.gamePhase = gamePhase;
 
 	}
-	private int findLevelByNumber(int number) {
-		return number > 12 ? 3 : number > 8 ? 2 : 1;
-	}
-	private int findIndexCardByNumber(int number) {
-		return switch (findLevelByNumber(number)) {
-			case 1 -> number - 1;
-			case 2 -> number - 5;
-			case 3 -> number - 9;
-			default -> -1;
-		};
-	}
-	private Card selectCardByNumber(int number,Board board) {
-		return switch (gamePhase) {
-		case Base b ->  board.getCards().get(1).get(number);
-		case Complet c -> board.getCards().get(findLevelByNumber(number)).get(findIndexCardByNumber(number));
-		};
-	}
+	
 	public boolean one(Board board, Player player) {
 	    Set<Stones> pickedColors = new HashSet<>();
 	    while (pickedColors.size() < 3) {
