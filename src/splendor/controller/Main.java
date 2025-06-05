@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
+import splendor.action.GetPhase;
 import splendor.model.Card;
 import splendor.model.Game;
 import splendor.model.Parser;
@@ -31,24 +32,9 @@ public class Main {
 	        
 	        
     		
-        	
-            System.out.println("Bienvenue dans Splendor !");
-            System.out.println("1. Phase 1 - Jeu simplifié");
-            System.out.println("2. Phase 2 - Jeu complet");
-            System.out.print("Votre choix : ");
-
-            int choix = scanner.nextInt();
-            scanner.nextLine();
-
-            var gamePhase = switch (choix) {
-                case 1 -> new Base();
-                case 2 -> new Complet();
-                default -> {
-                    System.out.println("Choix invalide");
-                    yield null;
-                }
-            };
-            Game game = new Game(gamePhase,players);
+        	var gamePhase = new GetPhase().run();
+           
+            var game = new Game(gamePhase,players);
             game.run();
 
           

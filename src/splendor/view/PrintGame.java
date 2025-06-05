@@ -18,19 +18,20 @@ public record PrintGame(Board board, List<Player> players) {
 	public void printChoice(GamePhase gamePhase) {
 		switch (gamePhase) {
 			case Base b -> {
-				System.out.println("╔═════════════════════════════════════════════╗");
-				System.out.println("║ "+"\u001B[33m"+"1"+"\u001B[0m"+"%-42s ║".formatted(" - Prendre 3 jetons différents"));
-				System.out.println("║ "+"\u001B[33m"+"2"+"\u001B[0m"+"%-42s ║".formatted(" - Prendre 2 jetons de même couleur"));
-				System.out.println("║ "+"\u001B[33m"+"3"+"\u001B[0m"+"%-42s ║".formatted(" - Acheter une carte"));
-				System.out.println("╚═════════════════════════════════════════════╝");
+				System.out.println(new DisplayChoice(
+						"Prendre 3 jetons différents",
+						"Prendre 2 jetons de même couleur",
+						"Acheter une carte"
+						));
 			}
 			case Complet c -> {
-				System.out.println("╔═════════════════════════════════════════════╗");
-				System.out.println("║ "+"\u001B[33m"+"1"+"\u001B[0m"+"%-42s ║".formatted(" - Prendre 3 jetons différents"));
-				System.out.println("║ "+"\u001B[33m"+"2"+"\u001B[0m"+"%-42s ║".formatted(" - Prendre 2 jetons de même couleur"));
-				System.out.println("║ "+"\u001B[33m"+"3"+"\u001B[0m"+"%-42s ║".formatted(" - Acheter une carte"));
-				System.out.println("║ "+"\u001B[33m"+"4"+"\u001B[0m"+"%-42s ║".formatted(" - Reserver une carte"));
-				System.out.println("╚═════════════════════════════════════════════╝");
+				System.out.println(new DisplayChoice(
+						"Prendre 3 jetons différents",
+						"Prendre 2 jetons de même couleur",
+						"Acheter une carte",
+						"Reserver une carte",
+						"Acheter une carte reservée"
+						));
 			}
 		}
 		

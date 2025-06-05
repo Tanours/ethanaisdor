@@ -1,5 +1,6 @@
 package splendor.view;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -7,6 +8,17 @@ public record DisplayInSquare(int gap,String... args) {
 	public DisplayInSquare{
 		Objects.requireNonNull(args);
 		if(gap < 0) throw new IllegalArgumentException();
+	}
+	
+	public DisplayInSquare(String... args) {
+		this(10,args);
+	}
+	
+	public DisplayInSquare(List<String> args) {
+		this(args.toArray(new String[0]));
+	}
+	public DisplayInSquare(int gap,List<String> args) {
+		this(gap,args.toArray(new String[0]));
 	}
 	
 	private int getMaxSize() {

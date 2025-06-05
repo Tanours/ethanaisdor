@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import splendor.action.BuyCard;
+import splendor.action.BuyResCard;
 import splendor.action.Action;
 import splendor.action.ResCard;
 import splendor.action.Take2SameToken;
@@ -100,6 +101,7 @@ public class Game {
 	        case 2 -> new Take2SameToken(board, player);
 	        case 3 -> new BuyCard(board, player);
 	        case 4 -> new ResCard(board,player);
+	        case 5 -> new BuyResCard(player);
 	        default -> throw new IllegalArgumentException("Choix invalide : " + choice);
 	    };
 	}

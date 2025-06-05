@@ -42,31 +42,33 @@ public record ResCard(Board board,Player player) implements Action<Boolean>{
 			System.err.println("Trop de réservation, tue la réservervation. Essaie autre chose");
 			return null;
 		}
-		try {
 			while (true) {
-				System.out.println(new DisplayPrompt("Choisissez une carte (ou 'q' pour quitter) :"));
-				var input = sc.next();
-				input = input.trim();
-				if("q".equals(input)) {
-					return null;
-				}
-				if(input.matches("\\d+")) {
-					var number = Integer.parseInt(input);
-					var card = selectCardByNumber(number, board);
-					if(card == null) {
-						System.err.println("L'index ne correspond pas à une des cartes mon ami ");
-						continue;
+				try {
+					System.out.println(new DisplayPrompt("Choisissez une carte (ou 'q' pour quitter) :"));
+					var input = sc.next();
+					input = input.trim();
+					if("q".equals(input)) {
+						return false;
 					}
-					if(board.reserveCard(player, card)) {
-						player.addToken(Stones.GOLDJOKER, 1);
-						return true;
-					};
-					
+					if(input.matches("\\d+")) {
+						var number = Integer.parseInt(input);
+						var card = selectCardByNumber(number, board);
+						if(card == null) {
+							System.err.println("L'index ne correspond pas à une des cartes mon ami ");
+							continue;
+						}
+						if(board.reserveCard(player, card)) {
+							player.addToken(Stones.GOLDJOKER, 1);
+							return true;
+						};
+						
+					}
+				}catch(NoSuchElementException e) {
+					e.printStackTrace();
+					return false;
 				}
+				
 			}
-		}catch(NoSuchElementException e){
-			e.printStackTrace();
-			return null;
-		}
+		
 	}
 }

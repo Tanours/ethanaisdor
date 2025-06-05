@@ -40,7 +40,7 @@ public record Complet() implements GamePhase {
 		return 12;
 	}
 	public int getMaxChoice() {
-		return 4;
+		return 5;
 	}
 
 	
