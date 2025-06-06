@@ -43,7 +43,7 @@ public record Base() implements GamePhase {
 	public Map<Integer, List<Card>> initCards() {
 	    var hash = new HashMap<Integer, List<Card>>();
 	    var level1Cards = generateCardsListWithCost(1, 1, 8, 1);
-	    //Collections.shuffle(level1Cards); 
+	    Collections.shuffle(level1Cards); 
 	    hash.put(1, level1Cards);
 	    return hash;
 	}

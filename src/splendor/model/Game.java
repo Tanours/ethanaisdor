@@ -8,11 +8,11 @@ import java.util.Scanner;
 
 import splendor.action.BuyCard;
 import splendor.action.BuyResCard;
+import splendor.action.NobleVisit;
 import splendor.action.Action;
 import splendor.action.ResCard;
 import splendor.action.Take2SameToken;
 import splendor.action.Take3DiffToken;
-import splendor.controller.Complet;
 import splendor.controller.GamePhase;
 import splendor.view.PrintGame;
 
@@ -106,7 +106,6 @@ public class Game {
 	    };
 	}
 
-
 	
 	private void playerTurn(Player player) {
 	    Objects.requireNonNull(player);
@@ -132,73 +131,12 @@ public class Game {
 	            if(result.equals(true)) {
 	            	actionDone = true;
 	            }
-	
-
 	        } else {
 	            scanner.nextLine();
 	            System.out.println("Veuillez entrer un nombre valide.");
 	        }
 	    }
-
-	    visitNobles(player);
-	}
-
-
-	private List<Noble> allNobleVisit(Player player) {
-	    return board.getNobles().stream()
-	        .filter(noble -> noble.canVisit(player) && !player.getNobles().contains(noble))
-	        .toList();
-	}
-
-	public boolean visitNobles(Player player) {
-		Objects.requireNonNull(player);
-		
-		var allNoble = this.allNobleVisit(player);
-		
-		if(allNoble.isEmpty()) return false;
-		
-		System.out.println("Vous avez la visite de %s : ".formatted(allNoble.size() > 1 ? "plusieurs nobles" : "d'un noble"));
-		
-		if (allNoble.size() == 1) {
-		    var noble = allNoble.get(0);
-		    System.out.println("Vous êtes visité par un noble :");
-		    noble.displayNoble();
-		    player.getNobles().add(noble);
-		    player.addPrestige(noble.prestige());
-		    System.out.println("Vous avez acquis un noble");
-		    return true;
-		} else if(allNoble.size() > 1) {
-		    var chosen = this.selectNoble(allNoble);
-		    player.getNobles().add(chosen);
-		    player.addPrestige(chosen.prestige());
-		    System.out.println("Vous avez acquis un noble");
-		    return true;
-		} else {
-			return false;
-		}
-
-	}
-	
-	private Noble selectNoble(List<Noble> nobles) {
-	    System.out.println("Choisissez un noble à acquérir :");
-	    for (int i = 0; i < nobles.size(); i++) {
-	        System.out.println("[" + (i + 1) + "]");
-	        nobles.get(i).displayNoble();
-	    }
-
-	    int choice = -1;
-	    while (choice < 1 || choice > nobles.size()) {
-	        System.out.print("Entrez le numéro du noble : ");
-	        if (scanner.hasNextInt()) {
-	            choice = scanner.nextInt();
-	            scanner.nextLine();
-	        } else {
-	            scanner.nextLine();
-	            System.out.println("Entrée invalide");
-	        }
-	    }
-
-	    return nobles.get(choice - 1);
+	    new NobleVisit(board, player).run();
 	}
 
 
@@ -219,7 +157,6 @@ public class Game {
 				Thread.sleep(2000);
 				
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			for (var player : players) {

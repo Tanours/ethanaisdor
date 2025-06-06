@@ -1,7 +1,5 @@
 package splendor.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public record Noble(int id, String name, Price cost, int prestige) {
@@ -23,9 +21,21 @@ public record Noble(int id, String name, Price cost, int prestige) {
 		return cost.isBelow(player.getWallet());
 	}
 	
-	public void displayNoble() {
-		System.out.println(name);
+	@Override
+	public String toString() {
+		StringBuilder res = new StringBuilder();
+	    res.append("[");
+	    res.append("R:%-2s O:%-2s S:%-2s E:%-2s D:%-2s".formatted(
+	    		this.cost.getValue(Stones.RUBY),
+	    		this.cost.getValue(Stones.ONYX),
+	    		this.cost.getValue(Stones.SAPHIR),
+	    		this.cost.getValue(Stones.EMERALD),
+	    		this.cost.getValue(Stones.DIAMOND)
+	    		));
+	    res.append("]");
+	    return res.toString();
 	}
+	
 	
 	
 }
