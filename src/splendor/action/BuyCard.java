@@ -4,47 +4,44 @@ import java.util.Objects;
 
 import splendor.model.Board;
 import splendor.model.Player;
+import splendor.view.DisplayChoice;
+import splendor.view.DisplayPrompt;
 
 public record BuyCard(Board board, Player player) implements Action<Boolean>{
-	public Boolean run() {
+	public BuyCard {
 		Objects.requireNonNull(board);
 		Objects.requireNonNull(player);
-		
-		
-		try {
-			String input;
-			int cardIndex;
-			
-			do {
-				System.out.println("\nChoisissez une carte à acheter. Changer d'option : q " );
-				board.revealCards();
-				
-				input = Action.sc.next().toUpperCase();
-				cardIndex = Integer.parseInt(input);
-				
-				if (input.equals("Q")) {
-					return false; 
+	}
+	public Boolean run() {
+		if(player.getReserved().isEmpty()) {
+			return new BuyBoardCard(board, player).run();
+		}
+		System.out.println(new DisplayChoice(false,
+				"Acheter une carte réservée",
+				"Acheter une carte du plateau"));
+		while (true) {
+			try {
+				System.out.println(new DisplayPrompt("Choisissez une option (ou 'q' pour quitter) :"));
+				var input = sc.next().trim();
+				if(input.equals("q")) return false;
+				if(input.matches("\\d+")) {
+					var entry = Integer.parseInt(input);
+					if(entry != 1 && entry != 2) {
+						System.err.println("Je ne crois pas que ça soit une option. Essaie encore");
+						continue;
+					}
+					return switch (entry) {
+					case 1 -> new BuyResCard(player).run();
+					default -> new BuyBoardCard(board, player).run();
+					};
 				}
-				
-				
-			} while(!input.matches("\\d+") || cardIndex > 4);
-			
-			
-			
-			
-			Action.sc.nextLine();
-			var card = board.getCards().get(1).get(cardIndex-1);
-			if (!board.selectCard(player, card)) {
-				System.out.println("Vous ne pouvez pas acheter cette carte.");
-				Thread.sleep(2000);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 				return false;
 			}
-			return true;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
-		catch (InterruptedException e) {
-			return false;
+			
+			
 		}
 	}
 }
