@@ -57,7 +57,7 @@ public class Price {
 	}
 	
 	public Integer getValue(Stones stone) {
-		return map.get(stone);
+		return map.getOrDefault(stone, 0);
 	}
 	
 	@Override

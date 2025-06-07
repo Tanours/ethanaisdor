@@ -29,8 +29,8 @@ public class Parser {
 				
 					if(!parts[0].isBlank()) currentLevel = Integer.parseInt(parts[0]);
 					if(!parts[1].isBlank()) currentStone = parseStone(parts[1]);
-					currentPrestige = (parts[2].isBlank() ? 1 : Integer.parseInt(parts[2]));
-					
+					currentPrestige = (parts[2].isBlank() ? 0 : Integer.parseInt(parts[2]));
+					System.out.println(currentPrestige);
 					var price = parsePrice(parts[3]);
 					var card = new Card(currentId, currentStone, price, currentPrestige);
 					currentId++;

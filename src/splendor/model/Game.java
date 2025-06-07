@@ -167,6 +167,7 @@ public class Game {
 							"Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
 					gameOver = true;
 				}
+				System.out.println(board.getTokens());
 			}
 			
 			turn++;

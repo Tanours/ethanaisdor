@@ -122,8 +122,17 @@ public class Board {
 			}
 		}
 		return player.addReserved(card);
-		
 	}
+	
+	public void addPrice(Price price) {
+		Objects.requireNonNull(price);
+		
+	    for (var stone : Stones.values()) {
+	        var toAdd = price.getValue(stone);
+	        tokens.put(stone, tokens.getOrDefault(stone, 0) + toAdd);
+	    }
+	}
+	
 	public boolean selectCard(Player player, Card card) {
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(card);
@@ -134,14 +143,14 @@ public class Board {
 		}
 		
 		player.buyCard(card);
+		
+		this.addPrice(card.price());
 
 		for (var cardList : cards.values()) {
 			if (cardList.remove(card)) {
 				break;
 			}
 		}
-		
-		
 
 		return true;
 	}
