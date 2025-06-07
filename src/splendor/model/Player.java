@@ -75,24 +75,31 @@ public class Player {
 	
 	public boolean canBuy(Card card) {
 	    Objects.requireNonNull(card);
-
-	    var cardPrice = card.price();
-	    var bonuses = this.getBonusesCards();
-	    
-	    var priceTotal = cardPrice.substract(bonuses);
-	    
-	    return priceTotal.isBelow(this.wallet);
+	    return card.price().isBelow(wallet);
 	}
 
-	
-	public void buyCard(Card card) {
-		Objects.requireNonNull(card);
-		if(this.canBuy(card)) {
-			wallet = wallet.substract(card.price());
+	public List<Stones> getBonus(){
+		return cards.stream().map(c -> c.stone()).toList();
+	}
+	private Card getCardSubstractByBonus(Card card) {
+		var bonus = this.getBonus();
+		var realPrice = card.price();
+		if(bonus.isEmpty()) return card;
+		for( var stone : bonus) {
+			realPrice = realPrice.getValue(stone) == 0 ? realPrice : realPrice.substract(new Price(stone,1));
 		}
-	    
-	    cards.add(card);
-	    this.addPrestige(card.prestige());
+		return new Card(card.id(),card.stone(),realPrice,card.prestige());
+	}
+	public boolean buyCard(Card card) {
+		Objects.requireNonNull(card);
+		var realCard = getCardSubstractByBonus(card);
+		if(this.canBuy(realCard)) {
+			wallet = wallet.substract(realCard.price());
+			cards.add(card);
+		    this.addPrestige(card.prestige());
+		    return true;
+		}
+	    return false;
 	    
 	}
 	
@@ -178,24 +185,6 @@ public class Player {
 	public Map<Stones, Integer> getTokens() {
 		
 		return Map.copyOf(tokens);
-	}
-	
-	
-	public Price getBonusesCards() {
-	    var ruby = 0; var saphir = 0; var diamond = 0; var emerald = 0; var onyx = 0;
-
-	    for (Card card : cards) {
-	        Stones stone = card.stone();
-	        switch (stone) {
-	            case RUBY -> ruby++;
-	            case SAPHIR -> saphir++;
-	            case DIAMOND -> diamond++;
-	            case EMERALD -> emerald++;
-	            case ONYX -> onyx++;
-	            default -> {}
-	        }
-	    }
-	    return new Price(ruby, saphir, diamond, emerald, onyx);
 	}
 	
 }

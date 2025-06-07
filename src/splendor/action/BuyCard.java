@@ -31,10 +31,11 @@ public record BuyCard(Board board, Player player) implements Action<Boolean>{
 						continue;
 					}
 					return switch (entry) {
-					case 1 -> new BuyResCard(player).run();
+					case 1 -> new BuyResCard(player,board).run();
 					default -> new BuyBoardCard(board, player).run();
 					};
 				}
+				System.err.println("Les roses sont rouges et les options sont des nombres entre 1 et 2");
 			}
 			catch (Exception e) {
 				e.printStackTrace();

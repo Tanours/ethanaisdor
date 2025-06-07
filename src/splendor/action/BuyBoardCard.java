@@ -36,7 +36,7 @@ public record BuyBoardCard(Board board,Player player) implements Action<Boolean>
 			Action.sc.nextLine();
 			var card = board.getCards().get(1).get(cardIndex-1);
 			if (!board.selectCard(player, card)) {
-				System.out.println("Vous ne pouvez pas acheter cette carte.");
+				System.err.println("Vous ne pouvez pas acheter cette carte.");
 				Thread.sleep(2000);
 				return false;
 			}

@@ -3,20 +3,19 @@ package splendor.action;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-
+import splendor.model.Board;
 import splendor.model.Card;
 import splendor.model.Player;
 import splendor.view.DisplayCards;
 import splendor.view.DisplayPrompt;
 
-public record BuyResCard(Player player) implements Action<Boolean>{
+public record BuyResCard(Player player,Board board) implements Action<Boolean>{
 	public BuyResCard{
 		Objects.requireNonNull(player);
 	}
 	private boolean buyReserved(Card card) {
-		if(card.price().isBelow(player.getWallet())) {
+		if(player.buyCard(card)) {
 			player.getReserved().remove(card);
-			player.buyCard(card);
 			return true;
 		}
 		return false;

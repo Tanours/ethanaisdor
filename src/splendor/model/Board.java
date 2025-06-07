@@ -136,15 +136,14 @@ public class Board {
 	public boolean selectCard(Player player, Card card) {
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(card);
-
-		if (!player.canBuy(card)) {
+		if (!player.buyCard(card)) {
+			
 			System.out.println(card.price());
 			return false;
 		}
 		
-		player.buyCard(card);
-		
 		this.addPrice(card.price());
+
 
 		for (var cardList : cards.values()) {
 			if (cardList.remove(card)) {

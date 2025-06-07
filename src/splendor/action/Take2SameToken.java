@@ -1,11 +1,16 @@
 package splendor.action;
 
+import java.util.Objects;
+
 import splendor.model.Board;
 import splendor.model.Player;
 import splendor.model.Stones;
 
 public record Take2SameToken(Board board, Player player) implements Action<Boolean> {
-	
+	public Take2SameToken {
+		Objects.requireNonNull(board);
+		Objects.requireNonNull(player);
+	}
 	public Boolean run() {
 		System.out.println("Choisissez une couleur pour prendre 2 jetons. Changer d'option: q");
 
