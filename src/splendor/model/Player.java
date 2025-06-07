@@ -75,6 +75,7 @@ public class Player {
 	
 	public boolean canBuy(Card card) {
 	    Objects.requireNonNull(card);
+
 	    return card.price().isBelow(wallet);
 	}
 
@@ -185,6 +186,24 @@ public class Player {
 	public Map<Stones, Integer> getTokens() {
 		
 		return Map.copyOf(tokens);
+	}
+	
+	
+	public Price getBonusAsPrice() {
+	    var ruby = 0; var saphir = 0; var diamond = 0; var emerald = 0; var onyx = 0;
+
+	    for (Card card : cards) {
+	        Stones stone = card.stone();
+	        switch (stone) {
+	            case RUBY -> ruby++;
+	            case SAPHIR -> saphir++;
+	            case DIAMOND -> diamond++;
+	            case EMERALD -> emerald++;
+	            case ONYX -> onyx++;
+	            default -> {}
+	        }
+	    }
+	    return new Price(ruby, saphir, diamond, emerald, onyx);
 	}
 	
 }

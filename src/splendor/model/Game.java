@@ -101,7 +101,6 @@ public class Game {
 	        case 2 -> new Take2SameToken(board, player);
 	        case 3 -> new BuyCard(board, player);
 	        case 4 -> new ResCard(board,player);
-	        case 5 -> new BuyResCard(player);
 	        default -> throw new IllegalArgumentException("Choix invalide : " + choice);
 	    };
 	}

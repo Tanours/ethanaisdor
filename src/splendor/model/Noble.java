@@ -18,7 +18,7 @@ public record Noble(int id, String name, Price cost, int prestige) {
 	public boolean canVisit(Player player) {
 		Objects.requireNonNull(player);
 		
-		return cost.isBelow(player.getBonusesCards());
+		return cost.isBelow(player.getBonusAsPrice());
 	}
 	
 	@Override
