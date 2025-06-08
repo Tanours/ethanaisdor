@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import javax.swing.ImageIcon;
+
 public class Parser {
 	
 	public static HashMap<Integer, List<Card>> getDeveloppementCard(Path path, Charset charset) {
@@ -30,9 +32,10 @@ public class Parser {
 					if(!parts[0].isBlank()) currentLevel = Integer.parseInt(parts[0]);
 					if(!parts[1].isBlank()) currentStone = parseStone(parts[1]);
 					currentPrestige = (parts[2].isBlank() ? 0 : Integer.parseInt(parts[2]));
-					System.out.println(currentPrestige);
 					var price = parsePrice(parts[3]);
-					var card = new Card(currentId, currentStone, price, currentPrestige);
+					var image = new ImageIcon("assets/cards/level"+currentLevel+"/"+parts[3]+".png").getImage();
+					
+					var card = new Card(currentId, currentStone, price, currentPrestige,image);
 					currentId++;
 					
 					res.computeIfAbsent(currentLevel, level -> new ArrayList<>()).add(card);

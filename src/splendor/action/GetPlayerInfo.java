@@ -39,21 +39,17 @@ public record GetPlayerInfo() implements Action<List<Player>> {
 		return joueurName;
 	}
 	private int getPlayerAge() {
-		var joueurAge = -1;
-		while(joueurAge < 0) {
+		while(true) {
 			System.out.println(new DisplayPrompt("Age :"));
 			
-			sc.nextLine();
-			if(sc.hasNextInt()) {
-				joueurAge = sc.nextInt();
+			var input =  sc.next().trim();
+			if(input.matches("\\d+")) {
+				return Integer.parseInt(input);
 			}
 			else {
 				System.err.println("Tu connais pas ton age ?");
 			}
 		}
-		
-		
-		return joueurAge;
 	}
 	private String getRandomEmoji() {
 		var emojis = new ArrayList<String>();

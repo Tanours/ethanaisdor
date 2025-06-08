@@ -1,10 +1,13 @@
 package splendor.model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
+import com.github.forax.zen.Application;
 
 import splendor.action.BuyCard;
 import splendor.action.BuyResCard;
@@ -14,6 +17,7 @@ import splendor.action.ResCard;
 import splendor.action.Take2SameToken;
 import splendor.action.Take3DiffToken;
 import splendor.controller.GamePhase;
+import splendor.view.GraphicView;
 import splendor.view.PrintGame;
 
 public class Game {
@@ -32,49 +36,6 @@ public class Game {
 	    printGame = new PrintGame(board, players);
 	    //action = new Action(); 
 	    
-	}
-	
-	public static List<Player> initPlayers(Scanner scanner) {
-	    var players = new ArrayList<Player>();
-
-	    System.out.print("Combien de joueurs ? ");
-	    int nbPlayers = 0;
-	    nbPlayers = Integer.parseInt(scanner.nextLine());
-
-	    /*while (nbPlayers < 2 || nbPlayers > 4) {
-	        try {
-	            nbPlayers = Integer.parseInt(scanner.nextLine());
-	            if (nbPlayers < 2 || nbPlayers > 4) {
-	                System.out.println("Veuillez entrer un nombre entre 2 et 4.");
-	            }
-	        } catch (NumberFormatException e) {
-	            System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-	        }
-	    }*/
-
-	    for (int i = 0; i < nbPlayers; i++) {
-	        System.out.print("Nom du joueur " + (i + 1) + " : ");
-	        String name = scanner.nextLine();
-
-	        int age = -1;
-	        while (age <= 0) {
-	            System.out.print("Âge de " + name + " : ");
-	            try {
-	                age = Integer.parseInt(scanner.nextLine());
-	                if (age <= 0) {
-	                    System.out.println("L'âge doit être supérieur à 0.");
-	                }
-	            } catch (NumberFormatException e) {
-	                System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-	            }
-	        }
-
-	        players.add(new Player(name, age));
-	        System.out.println();
-	    }
-
-	    players.sort(Comparator.comparingInt(Player::getAge));
-	    return players;
 	}
 
 	private void printTurn(Integer turn,Player currPlayer,List<Player> players) {
@@ -143,34 +104,39 @@ public class Game {
 	private boolean victory(Player player) {
 		return player.getPoints() >= 15;
 	}
-
+	public Board getBoard() {
+		return this.board;
+	}
 	public void run() {
-		var turn = 1;
-		var gameOver = false;
-		while (!gameOver) {
-			for (int i = 0; i < 50; i++) { 
-	            System.out.println("\n");
-	        }
-			System.out.println("Plateau de jeu : \n");
-			board.revealCards();
-			try {
-				Thread.sleep(2000);
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			for (var player : players) {
-				printTurn(turn,player,players);
-				playerTurn(player);
-				if (victory(player)) {
-					System.out.println(
-							"Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
-					gameOver = true;
-				}
-				System.out.println(board.getTokens());
-			}
 			
-			turn++;
-		}
+			var turn = 1;
+			var gameOver = false;
+			while (!gameOver) {
+				for (int i = 0; i < 50; i++) { 
+		            System.out.println("\n");
+		        }
+				System.out.println("Plateau de jeu : \n");
+				board.revealCards();
+				try {
+					Thread.sleep(2000);
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				for (var player : players) {
+					printTurn(turn,player,players);
+					playerTurn(player);
+					if (victory(player)) {
+						System.out.println(
+								"Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
+						gameOver = true;
+					}
+					System.out.println(board.getTokens());
+				}
+				
+				turn++;
+			}
+		
+		
 	}
 }

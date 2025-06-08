@@ -1,26 +1,27 @@
 package splendor.model;
 
 
+import java.awt.Image;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public record Card(int id, Stones stone , Price price, int prestige) {
+public record Card(int id, Stones stone , Price price, int prestige,Image image,GraphicInfo graphicInfo) {
 	public Card{
 		if(id<0||prestige<0) {
 			throw new IllegalArgumentException();
 		}
+		Objects.requireNonNull(image);
+		Objects.requireNonNull(graphicInfo);
 		Objects.requireNonNull(stone);
 		Objects.requireNonNull(price);
 		
 	}
+	public Card(int id, Stones stone , Price price, int prestige,Image image) {
+		this(id,stone,price,prestige,image,new GraphicInfo());
+	}
 	
-	//@Override
-//	public String toString() {
-//		return "[" + stone + ", " + prestige + ", " + price + "]\n";
-//	}
-	
-	
+
 	@Override
 	public String toString() {
 	    StringBuilder res = new StringBuilder();
