@@ -11,11 +11,13 @@ public record Card(int id, Stones stone , Price price, int prestige,Image image,
 		if(id<0||prestige<0) {
 			throw new IllegalArgumentException();
 		}
-		Objects.requireNonNull(image);
 		Objects.requireNonNull(graphicInfo);
 		Objects.requireNonNull(stone);
 		Objects.requireNonNull(price);
 		
+	}
+	public Card(int id, Stones stone , Price price, int prestige) {
+		this(id,stone,price,prestige,null,new GraphicInfo());
 	}
 	public Card(int id, Stones stone , Price price, int prestige,Image image) {
 		this(id,stone,price,prestige,image,new GraphicInfo());
