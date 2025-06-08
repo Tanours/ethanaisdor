@@ -47,12 +47,10 @@ public class GraphicView {
 		if(event == null ) return null;
 		var x = event.location().x();
 		var y = event.location().y();
-		System.out.println(x);
-		System.out.println(y);
-		for (var cards : board.getCards().values().stream().limit(4).toList()) {
-			for (var card : cards) {
+		for (var cards : board.getCards().values()) {
+			var cardsOnView = cards.stream().limit(4).toList();
+			for (var card : cardsOnView) {
 				var x_min = card.graphicInfo().getX();
-				System.out.println(card.graphicInfo());
 				var y_min = card.graphicInfo().getY();
 				var x_max = x_min + card.graphicInfo().getWidth();
 				var y_max = y_min + card.graphicInfo().getHeight();
@@ -74,8 +72,8 @@ public class GraphicView {
 					var image = realCaerds.get(index).image();
 					int cardX = x + index * (cardWidth + gap);
 					int cardY = y;
-					card.graphicInfo().setX(x);
-					card.graphicInfo().setX(y);
+					card.graphicInfo().setX(cardX);
+					card.graphicInfo().setY(cardY);
 					card.graphicInfo().setHeight(cardHeight);
 					card.graphicInfo().setWidth(cardWidth);
 					g2d.drawImage(image, cardX, cardY, cardWidth, cardHeight, null);
