@@ -121,7 +121,8 @@ public class Board {
 				break;
 			}
 		}
-		return player.addReserved(card);
+		
+		return player.addReserved(card) && this.takeToken(player, Stones.GOLDJOKER);
 	}
 	
 	public void addPrice(Price price) {

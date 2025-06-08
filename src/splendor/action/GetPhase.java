@@ -21,8 +21,7 @@ public record GetPhase() implements Action<GamePhase> {
 		while (true) {
 			try {
 				System.out.println(new DisplayPrompt("Choisissez une mode de jeu :"));
-				var input = sc.next();
-				input = input.trim();
+				var input = sc.next().trim();
 				if(input.matches("\\d+")) {
 					var entry = Integer.parseInt(input);
 					if(entry != 1 && entry != 2) {

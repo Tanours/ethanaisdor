@@ -22,10 +22,12 @@ public class Price {
 				stone.equals(Stones.SAPHIR) ? value : 0,
 				stone.equals(Stones.DIAMOND) ? value : 0,
 				stone.equals(Stones.EMERALD) ? value : 0,
-				stone.equals(Stones.ONYX) ? value : 0
+				stone.equals(Stones.ONYX) ? value : 0,
+				stone.equals(Stones.GOLDJOKER) ? value : 0
 		);
 		 
 	}
+	
 	public Price(int ruby, int saphir, int diamond, int emerald,int onyx) {
 		if(ruby < 0 || saphir < 0 || diamond < 0 || emerald < 0 || onyx < 0) {
 			throw new IllegalArgumentException();
@@ -35,6 +37,18 @@ public class Price {
 		map.putIfAbsent(Stones.DIAMOND, diamond);
 		map.putIfAbsent(Stones.EMERALD, emerald);
 		map.putIfAbsent(Stones.ONYX, onyx);
+	}
+	
+	public Price(int ruby, int saphir, int diamond, int emerald,int onyx, int goldJoker) {
+		if(ruby < 0 || saphir < 0 || diamond < 0 || emerald < 0 || onyx < 0) {
+			throw new IllegalArgumentException();
+		}
+		map.putIfAbsent(Stones.RUBY, ruby);
+		map.putIfAbsent(Stones.SAPHIR, saphir);
+		map.putIfAbsent(Stones.DIAMOND, diamond);
+		map.putIfAbsent(Stones.EMERALD, emerald);
+		map.putIfAbsent(Stones.ONYX, onyx);
+		map.putIfAbsent(Stones.GOLDJOKER, goldJoker);
 	}
 	
 	public boolean isBelow(Price price) {
@@ -64,12 +78,14 @@ public class Price {
 	public String toString() {
 		StringBuilder res = new StringBuilder();
 	    res.append("[");
-	    res.append(" S:%-2s E:%-2s R:%-2s D:%-2s O:%-2s".formatted(
+	    res.append(" S:%-2s E:%-2s R:%-2s D:%-2s O:%-2s G:%-2s".formatted(
 	    		this.getValue(Stones.SAPHIR),
 	    		this.getValue(Stones.EMERALD),
 	    		this.getValue(Stones.RUBY),
 	    		this.getValue(Stones.DIAMOND),
-	    		this.getValue(Stones.ONYX)
+	    		this.getValue(Stones.ONYX),
+	    		this.getValue(Stones.GOLDJOKER)
+	    		
 	    		));
 	    res.append("]");
 	    return res.toString();

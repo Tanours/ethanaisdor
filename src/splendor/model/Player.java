@@ -1,6 +1,7 @@
 package splendor.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -9,7 +10,6 @@ public class Player {
 	
 	private final String name;
 	private final int age;
-	public Map<Stones, Integer> tokens;
 	private final List<Card> cards;
 	private final List<Card> reservedCards;
 	private final List<Noble> nobles;
@@ -25,7 +25,6 @@ public class Player {
 		
 		this.name = name;
 		this.age = age;
-		
 		nobles = new ArrayList<>();
 		points = 0;
 		cards = new ArrayList<>();
@@ -60,13 +59,15 @@ public class Player {
 	    int diamond = wallet.getValue(Stones.DIAMOND);
 	    int emerald = wallet.getValue(Stones.EMERALD);
 	    int onyx = wallet.getValue(Stones.ONYX);
+	    int goldJoker = wallet.getValue(Stones.GOLDJOKER);
 
 	    wallet = new Price(
 	        ruby + (stone.equals(Stones.RUBY) ? quantity : 0),
 	        saphir + (stone.equals(Stones.SAPHIR) ? quantity : 0),
 	        diamond + (stone.equals(Stones.DIAMOND) ? quantity : 0),
 	        emerald + (stone.equals(Stones.EMERALD) ? quantity : 0),
-	        onyx + (stone.equals(Stones.ONYX) ? quantity : 0)
+	        onyx + (stone.equals(Stones.ONYX) ? quantity : 0),
+	        goldJoker + (stone.equals(Stones.GOLDJOKER) ? quantity : 0)
 	    );
 	    return true;
 	}
@@ -75,13 +76,39 @@ public class Player {
 	
 	public boolean canBuy(Card card) {
 	    Objects.requireNonNull(card);
-
+	    
 	    return card.price().isBelow(wallet);
 	}
+	
+	public boolean canBuyWithJoker(Card card) {
+		Objects.requireNonNull(card);
+	    var price = card.price();
+	    var missingTotal = calculateMissingTokens(price).values().stream().mapToInt(Integer::intValue).sum();
+	    var jokers = wallet.getValue(Stones.GOLDJOKER);
+
+	    return missingTotal <= jokers;
+	}
+	
+	private Map<Stones, Integer> calculateMissingTokens(Price price) {
+		Objects.requireNonNull(price);
+	    var missing = new HashMap<Stones, Integer>();
+
+	    for (var stone : List.of(Stones.RUBY, Stones.SAPHIR, Stones.DIAMOND, Stones.EMERALD, Stones.ONYX)) {
+	        var required = price.getValue(stone);
+	        var owned = wallet.getValue(stone);
+	        var diff = required - owned;
+	        if(diff > 0){
+	            missing.put(stone, diff);
+	        }
+	    }
+	    return missing;
+	}
+	
 
 	public List<Stones> getBonus(){
 		return cards.stream().map(c -> c.stone()).toList();
 	}
+	
 	private Card getCardSubstractByBonus(Card card) {
 		var bonus = this.getBonus();
 		var realPrice = card.price();
@@ -91,6 +118,7 @@ public class Player {
 		}
 		return new Card(card.id(),card.stone(),realPrice,card.prestige());
 	}
+	
 	public boolean buyCard(Card card) {
 		Objects.requireNonNull(card);
 		var realCard = getCardSubstractByBonus(card);
@@ -99,9 +127,18 @@ public class Player {
 			cards.add(card);
 		    this.addPrestige(card.prestige());
 		    return true;
+		} else if(this.canBuyWithJoker(realCard)) {
+			var missing = calculateMissingTokens(card.price());
+			for(var miss : missing.entrySet()) {
+				this.addToken(miss.getKey(), 1);
+			}
+			wallet = wallet.substract(new Price(0, 0, 0, 0, 0, missing.size()));
+			wallet = wallet.substract(realCard.price());
+			cards.add(card);
+		    this.addPrestige(card.prestige());
+		    return true;
 		}
-	    return false;
-	    
+	    return false; 
 	}
 	
 	@Override
@@ -135,7 +172,7 @@ public class Player {
 	}
 	public boolean addReserved(Card card) {
 		
-		return (reservedCards.size() >= 3) ? false : reservedCards.add(card) && addToken(Stones.GOLDJOKER, 1);
+		return (reservedCards.size() >= 3) ? false : reservedCards.add(card);// && addToken(Stones.GOLDJOKER, 1);
 	}
 	@Override
 	public boolean equals(Object o) {
@@ -180,12 +217,6 @@ public class Player {
 	}
 	public void addPrestige(int points) {
 	    this.points += points;
-	}
-
-
-	public Map<Stones, Integer> getTokens() {
-		
-		return Map.copyOf(tokens);
 	}
 	
 	

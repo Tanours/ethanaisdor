@@ -127,6 +127,7 @@ public class Game {
 
 	            var action = getActionFromChoice(choice, player);
 	            var result = action.run();
+
 	            if(result.equals(true)) {
 	            	actionDone = true;
 	            }

@@ -58,7 +58,7 @@ public record ResCard(Board board,Player player) implements Action<Boolean>{
 							continue;
 						}
 						if(board.reserveCard(player, card)) {
-							player.addToken(Stones.GOLDJOKER, 1);
+							//player.addToken(Stones.GOLDJOKER, 1);
 							return true;
 						};
 						
