@@ -2,6 +2,7 @@ package splendor.view;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import com.github.forax.zen.Application;
@@ -37,30 +38,52 @@ public class GraphicView {
 			var viewCardHeight = (int) (screenHeight * 0.23);
 			var viewCardWidth = (int) (screenWidth * 0.1);
 			var x = (int) screenWidth / 2;
-			var y = (int) (level.getKey() * 75 + (level.getKey() - 1) * viewCardHeight);
+			var y = (int) (level.getKey() * 40 + (level.getKey() - 1) * viewCardHeight);
 			System.out.println(cards);
 			this.drawCards(cards, x, y, viewCardWidth, viewCardHeight, 20);
 		}
 	}
 
-	public Card getCardFromView(PointerEvent event) {
-		if(event == null ) return null;
+	public Card getCardFromView(PointerEvent event, List<Card> cards) {
+		if (event == null)
+			return null;
 		var x = event.location().x();
 		var y = event.location().y();
-		for (var cards : board.getCards().values()) {
-			var cardsOnView = cards.stream().limit(4).toList();
-			for (var card : cardsOnView) {
-				var x_min = card.graphicInfo().getX();
-				var y_min = card.graphicInfo().getY();
-				var x_max = x_min + card.graphicInfo().getWidth();
-				var y_max = y_min + card.graphicInfo().getHeight();
-				if ((x >= x_min && x <= x_max) && (y >= y_min && y <= y_max)) {
-					return card;
-				}
+		for (var card : cards) {
+			var x_min = card.graphicInfo().getX();
+			var y_min = card.graphicInfo().getY();
+			var x_max = x_min + card.graphicInfo().getWidth();
+			var y_max = y_min + card.graphicInfo().getHeight();
+			if ((x >= x_min && x <= x_max) && (y >= y_min && y <= y_max)) {
+				return card;
 			}
+
 		}
 		return null;
 	}
+	
+	public Card getCardFromView(PointerEvent event, Map<Integer, List<Card>> cards) {
+	    if (event == null) return null;
+
+	    int x = event.location().x();
+	    int y = event.location().y();
+
+	    for (List<Card> cardList : cards.values()) {
+	        for (Card card : cardList) {
+	            var info = card.graphicInfo();
+	            int xMin = info.getX();
+	            int yMin = info.getY();
+	            int xMax = xMin + info.getWidth();
+	            int yMax = yMin + info.getHeight();
+
+	            if (x >= xMin && x <= xMax && y >= yMin && y <= yMax) {
+	                return card;
+	            }
+	        }
+	    }
+	    return null;
+	}
+
 
 	public void drawCards(List<Card> cards, int x, int y, int cardWidth, int cardHeight, int gap) {
 		var realCaerds = cards.stream().limit(4).toList();

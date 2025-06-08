@@ -43,7 +43,7 @@ public class MainTest {
 				 switch (event) {
 				 	case PointerEvent p: {
 				 		if(p.action().equals(PointerEvent.Action.POINTER_DOWN)) {
-				 			var card = view.getCardFromView(p);
+				 			var card = view.getCardFromView(p, game.getBoard().getCards());
 					 		System.out.println(card);
 				 		}
 				 	}
