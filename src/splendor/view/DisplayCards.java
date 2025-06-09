@@ -25,13 +25,21 @@ public record DisplayCards(TreeMap<Integer,List<Card>> cardsMap) {
 		for(var i = 0; i<nb;i++) build.add("●");
 		return build.toString();
 	}
-	private String getCardElement(String value,List<Card> cards) {
+	private String getCardElement(String value,List<Card> cards, int level) {
+		Objects.requireNonNull(value);
+		Objects.requireNonNull(cards);
+		
 		var res = new StringBuilder();
 		res.append("\n");
 		
 		if(value.equals("header")) {
 			var firstCardId = cards.get(0).id();
-			var cardGap = firstCardId >= 70 ? 8 : firstCardId >= 40 ? 4 : 0;
+			//var cardGap = firstCardId >= 70 ? 8 : firstCardId >= 40 ? 4 : 0;
+			var cardGap = switch(level) {
+			case 2 -> 4;
+			case 3 -> 8;
+			default -> 0;
+			};
 			for(var i = 1;i<= cards.size();i++) {
 				var card = cards.get(i-1);
 				var stoneElement = "║ %-8s PRESTIGE +%-2s   %8s ║".formatted(cardGap+i,card.prestige(),card.stone());
@@ -56,7 +64,7 @@ public record DisplayCards(TreeMap<Integer,List<Card>> cardsMap) {
 		return res.toString();
 		
 	}
-	private String getLine(List<Card> cards) {
+	private String getLine(List<Card> cards, int level) {
 		var cardsLimited = cards.stream().limit(4).toList();
 		var res = new StringBuilder();
 		var boardHorizontal = "╔══════════════════════════════════╗"; 
@@ -65,14 +73,14 @@ public record DisplayCards(TreeMap<Integer,List<Card>> cardsMap) {
 			res.append(boardHorizontal).append(" ");
 			
 		};
-		var info = getCardElement("header",cardsLimited);
+		var info = getCardElement("header",cardsLimited, level);
 		res.append(info);
 		res.append("\n");
 		for(var card : cardsLimited) {
 			res.append("╠------------- cost ---------------╣").append(" ");
 			
 		}
-		var cost = getCardElement("cost",cardsLimited);
+		var cost = getCardElement("cost",cardsLimited, level);
 		res.append(cost);
 		for(var card : cardsLimited) {
 			res.append(boardHorizontalEnd).append(" ");
@@ -86,8 +94,8 @@ public record DisplayCards(TreeMap<Integer,List<Card>> cardsMap) {
 	public String toString() {
 		var joiner = new StringJoiner("\n");
 	
-		for(var el : cardsMap.values()) {
-			joiner.add(getLine(el));
+		for(var el : cardsMap.entrySet()) {
+			joiner.add(getLine(el.getValue(), el.getKey()));
 		}
 		
 		return joiner.toString();

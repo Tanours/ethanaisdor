@@ -29,8 +29,7 @@ public record PrintGame(Board board, List<Player> players) {
 						"Prendre 3 jetons différents",
 						"Prendre 2 jetons de même couleur",
 						"Acheter une carte",
-						"Reserver une carte",
-						"Acheter une carte reservée"
+						"Reserver une carte"
 						));
 			}
 		}
