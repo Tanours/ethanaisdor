@@ -11,12 +11,14 @@ import com.github.forax.zen.Application;
 
 import splendor.action.BuyCard;
 import splendor.action.BuyResCard;
+import splendor.action.DisplayPlayerResCard;
 import splendor.action.NobleVisit;
 import splendor.action.Action;
 import splendor.action.ResCard;
 import splendor.action.Take2SameToken;
 import splendor.action.Take3DiffToken;
 import splendor.controller.GamePhase;
+import splendor.view.DisplayPrompt;
 import splendor.view.GraphicView;
 import splendor.view.PrintGame;
 
@@ -56,12 +58,13 @@ public class Game {
 		System.out.println(res.toString());
 	}
 	
-	private Action<?> getActionFromChoice(int choice, Player player) {
+	private Action<Boolean> getActionFromChoice(int choice, Player player) {
 	    return switch (choice) {
 	        case 1 -> new Take3DiffToken(board, player);
 	        case 2 -> new Take2SameToken(board, player);
 	        case 3 -> new BuyCard(board, player);
 	        case 4 -> new ResCard(board,player);
+	        case 5 -> new DisplayPlayerResCard(player);
 	        default -> throw new IllegalArgumentException("Choix invalide : " + choice);
 	    };
 	}
@@ -74,15 +77,15 @@ public class Game {
 
 	    while (!actionDone) {
 	        System.out.println(player);
-	        printGame.printChoice(phase);
-	        System.out.println("\nChoisissez une option : ");
+	        printGame.printChoice(phase,player);
+	        System.out.println(new DisplayPrompt("Choisissez une option : "));
 
 	        if (scanner.hasNextInt()) {
 	            choice = scanner.nextInt();
 	            scanner.nextLine();
 
 	            if (choice < 1 || choice > phase.getMaxChoice()) {
-	                System.out.println("Veuillez entrer un nombre valide.");
+	                System.err.println("Veuillez entrer un nombre valide.");
 	                continue;
 	            }
 
@@ -94,7 +97,7 @@ public class Game {
 	            }
 	        } else {
 	            scanner.nextLine();
-	            System.out.println("Veuillez entrer un nombre valide.");
+	            System.err.println("Veuillez entrer un nombre valide.");
 	        }
 	    }
 	    new NobleVisit(board, player).run();
@@ -112,11 +115,10 @@ public class Game {
 			var turn = 1;
 			var gameOver = false;
 			while (!gameOver) {
-				for (int i = 0; i < 50; i++) { 
-		            System.out.println("\n");
-		        }
+				
 				System.out.println("Plateau de jeu : \n");
 				board.revealCards();
+				board.revealTokens();
 				try {
 					Thread.sleep(2000);
 					
@@ -124,16 +126,24 @@ public class Game {
 					e.printStackTrace();
 				}
 				for (var player : players) {
+					System.out.println("━".repeat(200));
 					printTurn(turn,player,players);
 					playerTurn(player);
+					
 					if (victory(player)) {
 						System.out.println(
 								"Le joueur " + player.getName() + " a gagné avec " + player.getPoints() + " points !");
 						gameOver = true;
 					}
-					System.out.println(board.getTokens());
+					try {
+						Thread.sleep(1000);
+						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					board.revealTokens();
 				}
-				
+				System.out.println("━".repeat(75)+" Nouveau Tour "+"━".repeat(75));
 				turn++;
 			}
 		

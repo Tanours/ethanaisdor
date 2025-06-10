@@ -78,10 +78,9 @@ public class Board {
 		if(count < 0) {
 			return false;
 		}
-		for(var i = 0; i < count; i++) {
-			tokens.put(stone, tokens.get(stone) - 1);
-		    player.addToken(stone, 1);
-		}
+		
+		tokens.put(stone, tokens.get(stone) - count);
+		player.addToken(stone, count);
 		
 		return true;	
 	}
@@ -89,7 +88,7 @@ public class Board {
 
 	public HashMap<Stones, Integer> generateTokens() {
 		var res = new HashMap<Stones, Integer>();
-
+		
 		res.put(Stones.SAPHIR, 7);
 		res.put(Stones.EMERALD, 7);
 		res.put(Stones.RUBY, 7);
@@ -130,20 +129,28 @@ public class Board {
 		
 	    for (var stone : Stones.values()) {
 	        var toAdd = price.getValue(stone);
-	        tokens.put(stone, tokens.getOrDefault(stone, 0) + toAdd);
+	        tokens.merge(stone,toAdd,Integer::sum);
 	    }
 	}
-	
+	public void revealTokens() {
+		var build = new StringBuilder();
+		build.append("Token : ");
+		for(var token : tokens.entrySet()) {
+			var stone = token.getKey();
+			build.append("%s●%s %s ".formatted(stone.getColor(),Stones.resetColor(),token.getValue()));
+
+		}
+		System.out.println(build.toString());
+	}
 	public boolean selectCard(Player player, Card card) {
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(card);
-		if (!player.buyCard(card)) {
+		if (!player.buyCard(card,this)) {
 			
 			System.out.println(card.price());
 			return false;
 		}
 		
-		this.addPrice(card.price());
 
 
 		for (var cardList : cards.values()) {

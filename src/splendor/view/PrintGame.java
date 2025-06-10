@@ -15,7 +15,7 @@ public record PrintGame(Board board, List<Player> players) {
 		Objects.requireNonNull(players);
 	}
 
-	public void printChoice(GamePhase gamePhase) {
+	public void printChoice(GamePhase gamePhase,Player player) {
 		switch (gamePhase) {
 			case Base b -> {
 				System.out.println(new DisplayChoice(
@@ -25,12 +25,24 @@ public record PrintGame(Board board, List<Player> players) {
 						));
 			}
 			case Complet c -> {
-				System.out.println(new DisplayChoice(
-						"Prendre 3 jetons différents",
-						"Prendre 2 jetons de même couleur",
-						"Acheter une carte",
-						"Reserver une carte"
-						));
+				if(player.getReserved().isEmpty()) {
+					System.out.println(new DisplayChoice(
+							"Prendre 3 jetons différents",
+							"Prendre 2 jetons de même couleur",
+							"Acheter une carte",
+							"Reserver une carte"
+							));
+				}
+				else {
+					System.out.println(new DisplayChoice(
+							"Prendre 3 jetons différents",
+							"Prendre 2 jetons de même couleur",
+							"Acheter une carte",
+							"Reserver une carte",
+							"Afficher les cartes réservés"
+							));
+				}
+				
 			}
 		}
 		

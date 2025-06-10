@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import splendor.model.Board;
 import splendor.model.Player;
+import splendor.view.DisplayPrompt;
 
 public record BuyBoardCard(Board board,Player player) implements Action<Boolean> {
 	public BuyBoardCard {
@@ -17,8 +18,9 @@ public record BuyBoardCard(Board board,Player player) implements Action<Boolean>
 			int cardIndex;
 			
 			do {
-				System.out.println("\nChoisissez une carte à acheter. Changer d'option : q " );
 				board.revealCards();
+				System.out.println(new DisplayPrompt("Choisissez une carte à acheter (ou 'q' pour quitter) :"));
+				
 				
 				input = Action.sc.next().toUpperCase();
 				cardIndex = Integer.parseInt(input);
@@ -36,15 +38,10 @@ public record BuyBoardCard(Board board,Player player) implements Action<Boolean>
 			Action.sc.nextLine();
 			var card = board.getCards().get(1).get(cardIndex-1);
 			if (!board.selectCard(player, card)) {
-				System.err.println("Vous ne pouvez pas acheter cette carte.");
-				Thread.sleep(2000);
 				return false;
 			}
 			return true;
 		} catch (IllegalArgumentException e) {
-			return false;
-		}
-		catch (InterruptedException e) {
 			return false;
 		}
 	}

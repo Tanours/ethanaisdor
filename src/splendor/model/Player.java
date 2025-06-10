@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import splendor.view.DisplayInfo;
+
 public class Player {
 
 	private final String name;
@@ -114,28 +116,45 @@ public class Player {
 		return new Card(card.id(), card.stone(), realPrice, card.prestige());
 	}
 
-	public boolean buyCard(Card card) {
+	public boolean buyCard(Card card, Board board) {
 		Objects.requireNonNull(card);
-		var realCard = getCardSubstractByBonus(card);
-		if (this.canBuy(realCard)) {
-			wallet = wallet.substract(realCard.price());
-			cards.add(card);
-			this.addPrestige(card.prestige());
-			return true;
-		} else if (this.canBuyWithJoker(realCard)) {
-			var missing = calculateMissingTokens(card.price());
-			for (var miss : missing.entrySet()) {
-				this.addToken(miss.getKey(), 1);
-			}
-			wallet = wallet.substract(new Price(0, 0, 0, 0, 0, missing.entrySet().stream()
-					.mapToInt(entry -> entry.getValue()).sum()
-					));
-			wallet = wallet.substract(realCard.price());
-			cards.add(card);
-			this.addPrestige(card.prestige());
-			return true;
+		Objects.requireNonNull(board);
+		
+		var cardBonus = getCardSubstractByBonus(card);
+		
+		if(!this.canBuy(cardBonus)) {
+			return buyCardWithJoker(cardBonus,board);
 		}
-		return false;
+		wallet.substract(cardBonus.price());
+		board.addPrice(cardBonus.price());
+		return true;
+	}
+
+	private boolean buyCardWithJoker(Card card,Board board) {
+		Objects.requireNonNull(card);
+		Objects.requireNonNull(board);
+		
+		var currPrice = card.price();
+		var missingToken = calculateMissingTokens(card.price());
+		var countToken = missingToken.values().stream().mapToInt(m -> m.intValue()).sum();
+		
+		if(countToken > wallet.getValue(Stones.GOLDJOKER)) {
+			System.err.println("Trop pauvre mon ami. Trop pauvre !");
+			return false;
+		}
+		for(var token : missingToken.entrySet()) {
+			var goldToken = new Price(Stones.GOLDJOKER,token.getValue());
+			wallet.substract(goldToken);
+			board.addPrice(goldToken);
+			currPrice = currPrice.substract(new Price(token.getKey(),token.getValue()));
+		}
+		wallet.substract(currPrice);
+		board.addPrice(currPrice);
+		System.out.println(new DisplayInfo("Hahahaha une belle carte d'acquise !"));
+		return true;
+		
+		
+		
 	}
 
 	@Override

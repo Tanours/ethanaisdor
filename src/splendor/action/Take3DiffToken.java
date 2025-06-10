@@ -1,11 +1,15 @@
 package splendor.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 
 import splendor.model.Board;
 import splendor.model.Player;
 import splendor.model.Stones;
+import splendor.view.DisplayChoice;
+import splendor.view.DisplayPrompt;
 
 public record Take3DiffToken(Board board, Player player) implements Action<Boolean> {
 	
@@ -17,9 +21,14 @@ public record Take3DiffToken(Board board, Player player) implements Action<Boole
 	@Override
 	public Boolean run() {
 		var pickedColors = new HashSet<Stones>();
+		var options = new ArrayList<String>(Arrays.stream(Stones.values())
+				.limit(5)
+				.map(s -> "%s●%s %s".formatted(s.getColor(),Stones.resetColor(),s.name()))
+				.toList());
 		
 		while (pickedColors.size() < 3) {
-			System.out.println("Choisissez une couleur différente : (" + (pickedColors.size() + 1) + "/3). Changer d'option: q");
+			System.out.println(new DisplayChoice(true,false,options));
+			System.out.println(new DisplayPrompt("Choisissez une couleur différente (ou 'q' pour quitter) :\t (" + (pickedColors.size() + 1) + "/3). "));
 
 			try {
 				var input = Action.sc.next().toUpperCase();
@@ -29,22 +38,23 @@ public record Take3DiffToken(Board board, Player player) implements Action<Boole
 				}
 
 				Stones stone = Stones.valueOf(input);
-
+				
 				if (pickedColors.contains(stone)) {
-					System.out.println("Vous avez déjà choisi cette couleur.");
+					System.err.println("Vous avez déjà choisi cette couleur.");
 					continue;
 				}
-
+				
 				int available = board.getTokens().getOrDefault(stone, 0);
 				if (available < 1) {
-					System.out.println("Pas assez de jetons disponibles pour cette couleur.");
+					System.err.println("Pas assez de jetons disponibles pour cette couleur.");
 					continue;
 				}
 
 				pickedColors.add(stone);
+				options.remove("%s●%s %s".formatted(stone.getColor(),Stones.resetColor(),stone.name()));
 
 			} catch (IllegalArgumentException e) {
-				System.out.println("Couleur invalide.");
+				System.err.println("Couleur invalide.");
 			}
 		}
 

@@ -22,6 +22,7 @@ public enum Stones {
 			case EMERALD -> "\u001B[92m";
 			case RUBY -> "%s".formatted("\u001B[91m");
 			case DIAMOND -> "\u001B[36m";
+			case GOLDJOKER -> "\u001B[33m";
 			default -> "\u001B[90m";
 		};
 	}
